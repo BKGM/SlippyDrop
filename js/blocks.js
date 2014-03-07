@@ -67,16 +67,16 @@
             var game = this.game;
             for (var i = 0, l = blocks.length; i < l; i++) {
                 var v = blocks[i];
-                game.fill(255, 255, 255, 255);
-                game.rect(0, v.y, v.w, this.height);
-                game.rect(v.wr, v.y, WIDTH - v.wr, this.height);
                 var r = game.random(0, 2);
                 var k = game.random(5, 10);
                 if (r < 1){
-                    game.fill(255, 255, 255, game.random(70,140));
+                    game.fill(255, 255, 255, Math.random());
                     game.rect(0, v.y-k, v.w, this.height+2*k);
                     game.rect(v.wr, v.y-k, WIDTH - v.wr, this.height+2*k);
                 }
+                game.fill(255, 255, 255, 1);
+                game.rect(0, v.y, v.w, this.height);
+                game.rect(v.wr, v.y, WIDTH - v.wr, this.height);
             }
         }
     }
