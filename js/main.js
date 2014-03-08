@@ -4,7 +4,10 @@
 	window.onload=function(){
 		windowLoad();
         function windowLoad() {
-            var canvas = document.createElement("canvas");
+   //      	if (navigator.isCocoonJS) {
+			//     CocoonJS.App.setAntialias(true);
+			// }
+            var canvas = document.createElement('canvas');
             canvas.setAttribute("id", "game"); 
             canvas.width  = CANVAS_WIDTH ;
             canvas.height = CANVAS_HEIGHT;
@@ -22,19 +25,19 @@
 			        	return Math.floor(min + Math.random()*(max-min));
 			        };
     
-				    // director.state("ready", {
-				    // 	"background",
-				    // 	"setup",
-				    // 	"drop.tail",
-				    // 	"drop.update",
-				    // 	"drop.draw"
-				    // });
+				    director.state("ready", [
+				     	"background",
+				     	"setup",
+				     	"drop.tail",
+				     	"drop.update",
+				     	"drop.draw"
+				    ]);
 				    
 				    director.state("menu", [
 				    	"setup",
 				    	"background",
-				    	"menu",
-				    	"logo",
+				    	//"menu",
+				    	//"logo",
 				    	"drop.tail",
 				    	"drop.update",
 				    	"blocks.update",
@@ -44,7 +47,7 @@
 				    ]);
 				        
 				    director.taskOnce("setup", function(){
-				        Game.speed = 3;
+				        Game.speed = 3 * SCALE;
 				        Game.highscore = 0;
 				        Game.drop  = new Codea.Drop(Game);
 				        Game.blocks = new Codea.Blocks(Game);
@@ -64,6 +67,9 @@
 				    
 				    director.task("drop.draw", function(){
 				        Game.drop.draw()
+				        Game.fill(255, 255, 255, 1)
+				        var tail = Game.drop.tail;
+				        Game.text(Game.score, tail[tail.length - 1], Game.drop.y + tail.length*Game.speed + 20, 30 * SCALE);
 				    });
 
 				    director.task("blocks.update", function(){
@@ -74,7 +80,7 @@
 				        }
 
 				        if (Game.drop.collide(Game.blocks.now())) {
-				            director.switch("menu");
+				            director.switch("ready");
 				        }
 				    });
 

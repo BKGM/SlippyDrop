@@ -1,9 +1,9 @@
 (function(){
-	var diameter      = 20 * SCALE,
+	var diameter      = 10 * SCALE,
 		radius        = diameter/2,
 		radiusSquare  = Math.pow(radius,2),
-		maxTailLength = 20,
-		accelCoef     = 1 * SCALE,
+		maxTailLength = Math.floor(20*SCALE),
+		accelCoef     = 1,
 		maxX          = WIDTH - radius,
 		minX          = radius,
 		y             = HEIGHT/2,
@@ -54,22 +54,24 @@
 		},
 
 		collide: function(block){
-		    var btop = block.y + block.height, bbot = block.y;
+		    var btop = block.y + block.height/2, bbot = block.y;
+
 		    if (btop >= bot && bbot <= top) {
 		        var bearable = this.collideBearable(btop, bbot);
-		        if (this.x - block.w <= bearable || block.wr - this.x <= bearable)
+		        if (this.x - block.w <= bearable || block.wr - this.x <= bearable) {
 		            return true;
+		        }
 		    }
 		    return false;
 		},
 
 		draw: function(){
-			
+
 			var game = this.game;
 		    game.fill(255, 255, 255, 1);
 		    var tail = this.tail;
 		    for (var i = 0, l = tail.length; i < l; i++) {
-		        game.circle(tail[i], y + i * game.speed, (diameter - diameter * i/tail.length));
+		        game.circle(tail[i], y + i * 3, (diameter - diameter * i/tail.length));
 		    }
 		    
 		    game.circle(this.x, y, diameter);

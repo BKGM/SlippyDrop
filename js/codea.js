@@ -27,6 +27,9 @@ var Codea = Codea||{};
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = "center";
         this.ctx.imageSmoothingEnabled= true;
+        this.ctx.mozImageSmoothingEnabled= true;
+        this.ctx.webkitImageSmoothingEnabled= true;
+        //this.ctx.globalCompositeOperation = 'source-atop';
             
         return this;
     }

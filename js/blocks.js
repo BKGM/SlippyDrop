@@ -1,8 +1,8 @@
 (function(){
     var blockHeight   = 50 * SCALE,
-        blockGap      = 120 * SCALE,
+        blockGap      = 100 * SCALE,
         maxLeftWidth  = WIDTH - blockGap,
-        blockDistance = 210 * SCALE,
+        blockDistance = 250 * SCALE,
         maxY          = HEIGHT + blockHeight / 2;
 
     Codea.Blocks = function(game){
@@ -27,7 +27,7 @@
         },
 
         now: function(){
-            return this.blocks[this.current];
+            return this.get(this.current);
         },
 
         spawn: function(pos_y){
@@ -35,7 +35,8 @@
             var sy = pos_y - blockHeight;
             var sw = this.game.random(blockGap, maxLeftWidth);
             var swr = sw + blockGap
-            return this.blocks.push({y : sy, w : sw, wr : swr});
+            var height = this.height
+            return this.blocks.push({y : sy, w : sw, wr : swr, height: height});
         },
 
         unshift: function(){
@@ -68,9 +69,9 @@
             for (var i = 0, l = blocks.length; i < l; i++) {
                 var v = blocks[i];
                 var r = game.random(0, 2);
-                var k = game.random(5, 10);
+                var k = game.random(5, 10) * SCALE;
                 if (r < 1){
-                    game.fill(255, 255, 255, Math.random());
+                    game.fill(255, 255, 255, Math.random()*0.3);
                     game.rect(0, v.y-k, v.w, this.height+2*k);
                     game.rect(v.wr, v.y-k, WIDTH - v.wr, this.height+2*k);
                 }
