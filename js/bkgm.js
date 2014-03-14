@@ -261,9 +261,33 @@ var BKGM = BKGM||{};
 })();
 (function(){
     var BKGM = BKGM||{};
-    BKGM.Sprite = function(){
+    BKGM.loadImages = function(arr,callback){
+        var self=this;
+        var loaded=0;
+        for (var i = arr.length - 1; i >= 0; i--) {
+            var image=new Image();
+            image.src=arr[i];
+            image.onload=function(){
+                loaded++;
+                if (loaded==arr.length)
+                    if (callback) callback();
+                    else if(self.onloadImagesAll) self.onloadImagesAll();
+            }
+        };
+        return this;
+    };
+    BKGM.Sprite = function(obj){
+        if(obj){
+            this.image=obj.image||this.image;
+            this.rows=obj.rows||this.rows;
+            this.columns=obj.columns||this.columns;
+        }
         return this;
     }
     BKGM.Sprite.prototype= {
+        rows:1,
+        columns:1,
+        image:null,
+        changeFPS:200
     };
 })();
