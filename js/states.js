@@ -1,11 +1,11 @@
 (function(States){
-    Codea.States = function(){
+    BKGM.States = function(){
         this.current = "default";
         this.once    = false;
         this.states  = { default : [] };
         this.tasks   = {};
     }
-    Codea.States.prototype = {
+    BKGM.States.prototype = {
         state: function (name, tasks) {
             this.states[name] = tasks;
         },

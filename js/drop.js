@@ -10,7 +10,7 @@
 		top           = y + radius,
 		bot           = y - radius
     
-    Codea.Drop = function(game){
+    BKGM.Drop = function(game){
     	this.top      = top;
 	    this.x        = WIDTH/2;
 	    this.y        = y;
@@ -21,7 +21,7 @@
 	    this.game     = game;
     };
 
-    Codea.Drop.prototype = {
+    BKGM.Drop.prototype = {
 		left: function(){
     		return this.x - radius;
     	},

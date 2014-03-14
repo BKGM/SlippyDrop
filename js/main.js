@@ -16,9 +16,9 @@
 
             var director;
             
-            var Game = new Codea({
+            var Game = new BKGM({
 			    setup: function(){
-			        director = new Codea.States();
+			        director = new BKGM.States();
 			        var Game = this;
 
 			        Game.random = function(min, max){
@@ -49,8 +49,8 @@
 				    director.taskOnce("setup", function(){
 				        Game.speed = 3 * SCALE;
 				        Game.highscore = 0;
-				        Game.drop  = new Codea.Drop(Game);
-				        Game.blocks = new Codea.Blocks(Game);
+				        Game.drop  = new BKGM.Drop(Game);
+				        Game.blocks = new BKGM.Blocks(Game);
 				        Game.blocks.spawn(0);
 				        
 				        Game.score = 0;

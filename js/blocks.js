@@ -5,14 +5,14 @@
         blockDistance = 250 * SCALE,
         maxY          = HEIGHT + blockHeight / 2;
 
-    Codea.Blocks = function(game){
+    BKGM.Blocks = function(game){
         this.blocks  = [];
         this.current = 0;
         this.height  = blockHeight;
         this.game    = game;
     };
 
-    Codea.Blocks.prototype = {
+    BKGM.Blocks.prototype = {
         get: function(i){
             return this.blocks[i];
         },
