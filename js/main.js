@@ -20,12 +20,12 @@
 			    setup: function(){
 			        director = new BKGM.States();
 			        var Game = this;
-
+			        
 			        Game.random = function(min, max){
 			        	return Math.floor(min + Math.random()*(max-min));
 			        };
     
-				    director.state("ready", [
+				    director.state("ready", [	
 				     	"background",
 				     	"setup",
 				     	"drop.tail",

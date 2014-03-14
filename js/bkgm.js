@@ -4,7 +4,6 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
 WIDTH = window.innerWidth;
 HEIGHT = window.innerHeight;
 SCALE = WIDTH/768;
-
 var BKGM = BKGM||{};
 (function(){
     BKGM = function(obj){
@@ -13,7 +12,7 @@ var BKGM = BKGM||{};
         if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
             window.addEventListener('devicemotion', function(eventData){
                         if(eventData.accelerationIncludingGravity)
-                            _this.gravity = eventData.accelerationIncludingGravity;
+                            _this.gravity = {x:eventData.accelerationIncludingGravity.x/3,y:eventData.accelerationIncludingGravity.y/3,z:eventData.accelerationIncludingGravity.z};
                     }, false);
         } else {
            console.log("Not supported on your device or browser.  Sorry.")
@@ -26,15 +25,44 @@ var BKGM = BKGM||{};
         this.canvas = document.getElementById("game") || document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = "center";
+
+
         this.ctx.imageSmoothingEnabled= true;
         this.ctx.mozImageSmoothingEnabled= true;
         this.ctx.webkitImageSmoothingEnabled= true;
+        this._circle = document.createElement('canvas');
+        this._circle.width=200;
+        this._circle.height=200;
+        var _ctx = this._circle.getContext('2d');
+        _ctx.arc(100,100,100,0,Math.PI*2);
+        _ctx.fillStyle='#fff';
+        _ctx.fill();
+       
+        this._fps = {
+            startTime : 0,
+            frameNumber : 0,
+            getFPS : function(){
+                this.frameNumber++;
+                var d = new Date().getTime(),
+                    currentTime = ( d - this.startTime ) / 1000,
+                    result = Math.floor( ( this.frameNumber / currentTime ) );
+
+                if( currentTime > 1 ){
+                    this.startTime = new Date().getTime();
+                    this.frameNumber = 0;
+                }
+                return result;
+
+            }
+
+        };
         //this.ctx.globalCompositeOperation = 'source-atop';
             
         return this;
     }
     BKGM.prototype = {
         loop:function(_this){
+            _this.FPS=_this._fps.getFPS();
             _this.WIDTH = window.innerWidth;
             _this.HEIGHT  = window.innerHeight;
             _this.SCALE = _this.WIDTH/768;
@@ -104,7 +132,9 @@ var BKGM = BKGM||{};
             return this;
         },
         circle:function( x, y, diameter){
-            this.ctx.arc(x, y, diameter, 0, Math.PI*2);
+            this.ctx.beginPath();
+            // this.ctx.drawImage(this._circle,0,0,this._circle.width,this._circle.width,x - diameter,y - diameter,diameter*2,diameter*2);
+            this.ctx.arc(x, y, diameter, 0, Math.PI*2,false);
             this.ctx.fill(); 
             return this;
         },
@@ -227,5 +257,13 @@ var BKGM = BKGM||{};
             return this;
         }
 
+    };
+})();
+(function(){
+    var BKGM = BKGM||{};
+    BKGM.Sprite = function(){
+        return this;
+    }
+    BKGM.Sprite.prototype= {
     };
 })();
