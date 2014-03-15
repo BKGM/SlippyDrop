@@ -19,7 +19,7 @@ var BKGM = BKGM||{};
         _this.gravity={x:0,y:0,z:0};
         
         if(navigator &&  navigator.accelerometer){
-         /*    // The watch id references the current `watchAcceleration`
+             // The watch id references the current `watchAcceleration`
             var watchID = null;
 
 
@@ -44,7 +44,7 @@ var BKGM = BKGM||{};
                 }
             }
 
-            // onSuccess: Get a snapshot of the current acceleration
+           /* // onSuccess: Get a snapshot of the current acceleration
             //
             function onSuccess(acceleration) {
                 var element = document.getElementById('accelerometer');
@@ -59,7 +59,7 @@ var BKGM = BKGM||{};
             //
             function onError() {
                 alert('onError!');
-            }
+            }*/
 
             function onSuccess(acceleration) {
                 _this.gravity = {x:acceleration.x/3,y:acceleration.y/3,z:acceleration.z};
@@ -132,18 +132,7 @@ var BKGM = BKGM||{};
     BKGM.prototype = {
         loop:function(_this){
             _this.FPS=_this._fps.getFPS();
-            if(navigator &&  navigator.accelerometer){
             
-                function onSuccess(acceleration) {
-                    _this.gravity = {x:acceleration.x/3,y:acceleration.y/3,z:acceleration.z};
-                };
-
-                function onError() {
-                    alert('onError!');
-                };
-
-                navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
-            }
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
             _this.draw();        
