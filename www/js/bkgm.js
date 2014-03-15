@@ -92,6 +92,7 @@ var BKGM = BKGM||{};
             this.canvas = document.createElement('canvas');
             this.canvas.width  = window.innerWidth;
             this.canvas.height = window.innerHeight;
+            document.appendChild(this.canvas);
         }       
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = "center";
@@ -146,7 +147,6 @@ var BKGM = BKGM||{};
             WIDTH = this.canvas.width;
             HEIGHT  = this.canvas.height;
             SCALE = HEIGHT/1152;
-            alert("x:"+WIDTH + " - y:"+HEIGHT + " - s:"+SCALE);
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
@@ -204,6 +204,7 @@ var BKGM = BKGM||{};
             return this;
         },
         circle:function( x, y, diameter){
+            this.ctx.beginPath();
             // this.ctx.drawImage(this._circle,0,0,this._circle.width,this._circle.width,x - diameter,y - diameter,diameter*2,diameter*2);
             this.ctx.arc(x, y, diameter, 0, Math.PI*2,false);
             this.ctx.fill(); 
