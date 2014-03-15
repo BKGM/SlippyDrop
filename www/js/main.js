@@ -1,6 +1,4 @@
 (function(){
-	var CANVAS_WIDTH = window.innerWidth;
-	var CANVAS_HEIGHT  = window.innerHeight;
 	window.onload=function(){
 		windowLoad();
         function windowLoad() {
@@ -9,8 +7,8 @@
 			// }
             var canvas = document.createElement('canvas');
             canvas.setAttribute("id", "game"); 
-            canvas.width  = CANVAS_WIDTH ;
-            canvas.height = CANVAS_HEIGHT;
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
             var ctx = canvas.getContext("2d");
             document.body.appendChild(canvas);
 

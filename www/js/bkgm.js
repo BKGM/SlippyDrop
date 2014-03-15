@@ -35,10 +35,16 @@ var BKGM = BKGM||{};
             this.setup=obj.setup||this.setup;
             this.draw=obj.draw||this.draw;
         }
-        this.canvas = document.getElementById("game") || document.createElement('canvas');
+        if (document.getElementById("game"))
+            this.canvas = document.getElementById("game");
+        else {
+            this.canvas = document.createElement('canvas');
+            this.canvas.width  = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }       
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = "center";
-
+        alert("x:"+window.innerWidth + " - y:"+window.innerHeight);
 
         this.ctx.imageSmoothingEnabled= true;
         this.ctx.mozImageSmoothingEnabled= true;
