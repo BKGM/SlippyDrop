@@ -19,6 +19,10 @@
 	    this.tail     = [ this.x ];
 	    this.orgGravx = 0;
 	    this.game     = game;
+	    this._canvas=document.createElement('canvas');
+	    this._canvas.width=WIDTH;
+	    this._canvas.height=HEIGHT;
+	    this._ctx=this._canvas.getContext('2d');
     };
 
     BKGM.Drop.prototype = {
@@ -64,60 +68,32 @@
 		    }
 		    return false;
 		},
-		imgs:[],
-		pre : function(){
-			
-			
-		    var tail = this.tail;
-		    for (var i = 0, l = tail.length; i < l; i++) {
-		    	var canvas=document.createElement('canvas');
-				var ctx=canvas.getContext('2d');
-				ctx.beginPath();
-				ctx.fillStyle='#fff';
-				var r=diameter - diameter * i/tail.length;
-				ctx.arc(r,r,r,0,Math.PI/2,false);
-				ctx.fill();
-				this.imgs.push(canvas);
-		        // game.circle(tail[i], y + i * 3, (diameter - diameter * i/tail.length));
-		    }
-		    var canvas1=document.createElement('canvas');
-			var ctx1=canvas1.getContext('2d');
-			ctx.beginPath();
-			ctx.fillStyle='#000';
-			ctx.arc(diameter,diameter,diameter,0,Math.PI/2,false);
-			ctx.fill();
-			this.imgs.push(canvas);
-		    for (var i=0;i<2;i++){
-		    	var canvas=document.createElement('canvas');
-				var ctx=canvas.getContext('2d');
-		    	ctx.beginPath();
-				ctx.fillStyle='#000';
-				ctx.arc(diameter/4,diameter/4,diameter/4,0,Math.PI/2,false);
-				ctx.fill();
-				this.imgs.push(canvas);
-		    }
-		    
-
-		},
-		first:false,
 		draw: function(){
 
 			var game = this.game;
-		    game.fill(255, 255, 255, 1);
+			this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+			this._ctx.beginPath();
+			// this.ctx.arc(this.x, y, diameter, 0, Math.PI*2,false);
+            this._ctx.fillStyle='#fff';
+		    // game.fill(255, 255, 255, 1);
 		    var tail = this.tail;
 		    // if(tail.length==21 && !this.first) {this.pre();this.first=true;console.log(this.imgs.length)}
-		    game.circle(this.x, y, diameter);
+		    // game.circle(this.x, y, diameter);
 		    for (var i = tail.length - 1; i >= 0; i--) {
 		    	// var d=(diameter - diameter * i/tail.length)*2;
 		        // if(this.first)game.ctx.drawImage(this.imgs[i],tail[i]-this.imgs[i].width/2, y + i * 3-this.imgs[i].width/2);
-		        game.circle(tail[i], y + i * 3, (diameter - diameter * i/tail.length));
+		        this._ctx.arc(tail[i], y + i * 3, (diameter - diameter * i/tail.length), 0, Math.PI*2,false);
+		        // game.circle(tail[i], y + i * 3, (diameter - diameter * i/tail.length));
 		        // game.circle(this.x, y, diameter);
 		    }
 		    
-		    
+		    this._ctx.fill();
+		    this._ctx.closePath();
+		    game.ctx.drawImage(this._canvas,0,0,game.canvas.width,game.canvas.height);
 		    game.fill(0, 0, 0, 1);
 		    game.circle(this.x - diameter/4 - 1, y-1, diameter/4);
 		    game.circle(this.x + diameter/4 + 1, y-1, diameter/4);
+
 			
 		}
     }
