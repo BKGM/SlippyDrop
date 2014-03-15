@@ -10,13 +10,25 @@ var BKGM = BKGM||{};
         var _this=this;
         _this.gravity={x:0,y:0,z:0};
         
-        if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
-            window.addEventListener('devicemotion', function(eventData){
-                        if(eventData.accelerationIncludingGravity)
-                            _this.gravity = {x:-eventData.accelerationIncludingGravity.x/3,y:eventData.accelerationIncludingGravity.y/3,z:eventData.accelerationIncludingGravity.z};
-                    }, false);
+        if(navigator &&  navigator.accelerometer){
+            function onSuccess(acceleration) {
+                _this.gravity = {x:acceleration.x/3,y:acceleration.y/3,z:acceleration.z};
+            };
+
+            function onError() {
+                alert('onError!');
+            };
+
+            navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
         } else {
-           console.log("Not supported on your device or browser.  Sorry.")
+            if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
+                window.addEventListener('devicemotion', function(eventData){
+                            if(eventData.accelerationIncludingGravity)
+                                _this.gravity = {x:eventData.accelerationIncludingGravity.x/3,y:eventData.accelerationIncludingGravity.y/3,z:eventData.accelerationIncludingGravity.z};
+                        }, false);
+            } else {
+               console.log("Not supported on your device or browser.  Sorry.")
+            }
         }
         
         if(obj){
