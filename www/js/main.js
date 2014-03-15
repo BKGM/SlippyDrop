@@ -1,6 +1,14 @@
 (function(){
-	window.onload=function(){
-		windowLoad();
+	// Wait for device API libraries to load
+            //
+            document.addEventListener("deviceready", onDeviceReady, false);
+
+            // device APIs are available
+            //
+            function onDeviceReady() {
+                windowLoad();
+            }
+	// window.onload=function(){
         function windowLoad() {
    //      	if (navigator.isCocoonJS) {
 			//     CocoonJS.App.setAntialias(true);
@@ -171,5 +179,5 @@
 			    }
 			}).run();
         }
-	};
+	// };
 })()
