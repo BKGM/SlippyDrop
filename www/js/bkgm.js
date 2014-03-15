@@ -22,7 +22,7 @@ var BKGM = BKGM||{};
         if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
             window.addEventListener('devicemotion', function(eventData){
                         if(eventData.accelerationIncludingGravity)
-                            _this.gravity = {x:eventData.accelerationIncludingGravity.x/3,y:eventData.accelerationIncludingGravity.y/3,z:eventData.accelerationIncludingGravity.z};
+                            _this.gravity = {x:eventData.accelerationIncludingGravity.y/3,y:eventData.accelerationIncludingGravity.x/3,z:eventData.accelerationIncludingGravity.z};
                     }, false);
         } else {
             if(navigator &&  navigator.accelerometer){
