@@ -203,7 +203,6 @@ var BKGM = BKGM||{};
             return this;
         },
         circle:function( x, y, diameter){
-            this.ctx.beginPath();
             // this.ctx.drawImage(this._circle,0,0,this._circle.width,this._circle.width,x - diameter,y - diameter,diameter*2,diameter*2);
             this.ctx.arc(x, y, diameter, 0, Math.PI*2,false);
             this.ctx.fill(); 
