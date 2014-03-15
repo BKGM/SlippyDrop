@@ -142,8 +142,8 @@ var BKGM = BKGM||{};
             return _this;
         },
         run:function(){
-            WIDTH = window.innerWidth;
-            HEIGHT  = window.innerHeight;
+            WIDTH = this.canvas.width;
+            HEIGHT  = this.canvas.height;
             SCALE = HEIGHT/1152;
             this.setup();
             this.ctx.translate(0, this.canvas.height);
