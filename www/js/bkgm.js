@@ -95,7 +95,7 @@ var BKGM = BKGM||{};
         }       
         this.ctx = this.canvas.getContext('2d');
         this.ctx.textAlign = "center";
-        alert("x:"+window.innerWidth + " - y:"+window.innerHeight);
+        
 
         this.ctx.imageSmoothingEnabled= true;
         this.ctx.mozImageSmoothingEnabled= true;
@@ -146,6 +146,7 @@ var BKGM = BKGM||{};
             WIDTH = this.canvas.width;
             HEIGHT  = this.canvas.height;
             SCALE = HEIGHT/1152;
+            alert("x:"+WIDTH + " - y:"+HEIGHT + " - s:"+SCALE);
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
