@@ -146,6 +146,7 @@ var BKGM = BKGM||{};
             WIDTH = this.canvas.width;
             HEIGHT  = this.canvas.height;
             SCALE = HEIGHT/1152;
+            alert("x:"+WIDTH + " - y:"+HEIGHT + " - s:"+SCALE);
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
