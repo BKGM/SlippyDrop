@@ -68,8 +68,8 @@ var BKGM = BKGM||{};
             function onError() {
                 alert('onError!');
             };
-            startWatch();
-            // navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);*/
+            // startWatch();
+            navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);*/
         } else {
             if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
                 window.addEventListener('devicemotion', function(eventData){
