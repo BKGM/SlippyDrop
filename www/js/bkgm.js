@@ -394,7 +394,6 @@ var BKGM = BKGM||{};
                     else if(self.onloadImagesAll) self.onloadImagesAll();
             }
         };
-        return this;
     };
     BKGM.Sprite = function(obj){
         if(obj){
@@ -402,7 +401,6 @@ var BKGM = BKGM||{};
             this.rows=obj.rows||this.rows;
             this.columns=obj.columns||this.columns;
         }
-        return this;
     }
     BKGM.Sprite.prototype= {
         rows:1,
