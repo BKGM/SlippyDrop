@@ -15,9 +15,8 @@
                 } catch (e) {
                     alert(e);
                 }
-                }
                 if (callback) callback();
-            }
+                }       
                 
         }
         if (BKGM.loadJS)  {
