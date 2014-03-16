@@ -22,10 +22,12 @@
 
             var director;
             var fb;
+            alert("load  25");
             var Game = new BKGM({
 			    setup: function(){
 			        director = new BKGM.States();
 			        var Game = this;
+			        alert("load fb");
 			       	fb = new BKGM.FBconnect();
 			       	fb.login(); 
 			        Game.random = function(min, max){
