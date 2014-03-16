@@ -73,48 +73,8 @@
         },
         postCanvas:function(message, callback) {
             var authResponse = this.getAuthResponse();
-            if (!this.isLogin) {
-                alert('Error! Not login FB');
-                return;
-            }
-            var uid = authResponse.userID;
-            var access_token = authResponse.accessToken;
-            var canvas = document.getElementById("game");
-            var imageData = canvas.toDataURL("image/png");
-            var mess =message || "http://fb.com/BKGameMaker.com"
-            try {
-                blob = dataURItoBlob(imageData);
-            } catch (e) {
-                console.log(e);
-            }
-
-            var fd = new FormData();
-            fd.append("access_token", access_token);
-            fd.append("source", blob);
-            fd.append("message", mess);
-            try {
-                $.ajax({
-                    url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
-                    type: "POST",
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (data) {
-                        console.log("success " + data);
-                        $("#poster").html("Posted Canvas Successfully");
-                    },
-                    error: function (shr, status, data) {
-                        console.log("error " + data + " Status " + shr.status);
-                    },
-                    complete: function () {
-                        console.log("Posted to facebook");
-                    }
-                });
-
-            } catch (e) {
-                console.log(e);
-            }
+            alert(message);
+            
         }
     };
    
