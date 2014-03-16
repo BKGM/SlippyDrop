@@ -24,6 +24,17 @@
                 app_id=obj.appId;
             }
             var loaded=0;
+            var _onLoad=function(){
+                loaded++;
+                alert("load dc");
+                if(loaded==2){
+                    if (self.cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
+                    else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+                   
+                    if (callback) callback();
+                }       
+                    
+            }
             
         },
         logout:function(callback) {
