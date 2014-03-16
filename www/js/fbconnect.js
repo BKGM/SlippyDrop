@@ -73,7 +73,14 @@
         },
         postCanvas:function(message, callback) {
             var authResponse = this.getAuthResponse();
-            alert(message);
+
+            if (!this.isLogin) {
+                alert('Error! Not login FB');
+                return;
+            }
+            var uid = authResponse.userID;
+            var access_token = authResponse.accessToken;
+            alert(uid);
             
         }
     };
