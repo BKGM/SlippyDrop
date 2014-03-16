@@ -88,53 +88,54 @@
                   });
         },
         postCanvas:function(message, callback) {
-            this.getAuthResponse(function(access_token,uid){
-                // var uid = authResponse.userID;
-                // var access_token = authResponse.accessToken;
-                alert(uid);
-                var canvas = document.getElementById("game");
+            var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
                 window.plugins.socialsharing.share(message, null, imageData , null);
-                // try {
-                //     blob = dataURItoBlob(imageData);
-                // } catch (e) {
-                //     console.log(e);
-                // }
+            // this.getAuthResponse(function(access_token,uid){
+            //     // var uid = authResponse.userID;
+            //     // var access_token = authResponse.accessToken;
+            //     alert(uid);
 
-                // var fd = new FormData();
-                // fd.append("access_token", access_token);
-                // fd.append("source", blob);
-                // fd.append("message", mess);
-                // try {
-                //     $.ajax({
-                //         url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
-                //         type: "POST",
-                //         data: fd,
-                //         processData: false,
-                //         contentType: false,
-                //         cache: false,
-                //         success: function (data) {
-                //             console.log("success " + data);
-                //             $("#poster").html("Posted Canvas Successfully");
-                //         },
-                //         error: function (shr, status, data) {
-                //             console.log("error " + data + " Status " + shr.status);
-                //         },
-                //         complete: function () {
-                //             console.log("Posted to facebook");
-                //         }
-                //     });
+            //     // try {
+            //     //     blob = dataURItoBlob(imageData);
+            //     // } catch (e) {
+            //     //     console.log(e);
+            //     // }
 
-                // } catch (e) {
-                //     console.log(e);
-                // }
-            });
+            //     // var fd = new FormData();
+            //     // fd.append("access_token", access_token);
+            //     // fd.append("source", blob);
+            //     // fd.append("message", mess);
+            //     // try {
+            //     //     $.ajax({
+            //     //         url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
+            //     //         type: "POST",
+            //     //         data: fd,
+            //     //         processData: false,
+            //     //         contentType: false,
+            //     //         cache: false,
+            //     //         success: function (data) {
+            //     //             console.log("success " + data);
+            //     //             $("#poster").html("Posted Canvas Successfully");
+            //     //         },
+            //     //         error: function (shr, status, data) {
+            //     //             console.log("error " + data + " Status " + shr.status);
+            //     //         },
+            //     //         complete: function () {
+            //     //             console.log("Posted to facebook");
+            //     //         }
+            //     //     });
 
-            if (!this.isLogin) {
-                alert('Error! Not login FB');
-                return;
-            }
+            //     // } catch (e) {
+            //     //     console.log(e);
+            //     // }
+            // });
+
+            // if (!this.isLogin) {
+            //     alert('Error! Not login FB');
+            //     return;
+            // }
 
         }
     };
