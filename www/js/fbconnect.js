@@ -91,8 +91,8 @@
         },
         postCanvas:function(message, callback) {
             this.getAuthResponse(function(access_token,uid){
-                // var uid = authResponse.userID;
-                // var access_token = authResponse.accessToken;
+                var uid = authResponse.userID;
+                var access_token = authResponse.accessToken;
                 function win(r) {
                     console.log("Code = " + r.responseCode);
                     console.log("Response = " + r.response);
@@ -107,6 +107,27 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
+
+                function gotFS(fileSystem) {
+                    fileSystem.root.getFile("tmp_img.png", {create: true}, gotFileEntry, fail); 
+                }
+
+                function gotFileEntry(fileEntry) {
+                    fileEntry.createWriter(gotFileWriter, fail);
+                }
+
+                function gotFileWriter(writer) {
+                    writer.onwrite = function(evt) {
+                        console.log("write success");
+                    };
+                    writer.write(imageData);
+                }
+
+                function fail(error) {
+                    console.log(error.code);
+                }
+
+                window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
 
                 var options = new FileUploadOptions();
                 options.fileKey="file";
