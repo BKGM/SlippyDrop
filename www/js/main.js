@@ -29,7 +29,7 @@
 			        var Game = this;
 			        if(BKGM.FBConnect)alert("load fb");
 			       	fb = new BKGM.FBConnect();
-			       	fb.login(); 
+			       	// fb.login(); 
 			        Game.random = function(min, max){
 			        	return Math.floor(min + Math.random()*(max-min));
 			        };
