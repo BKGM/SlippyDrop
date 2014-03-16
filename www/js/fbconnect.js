@@ -15,7 +15,7 @@
                 } catch (e) {
                     alert(e);
                 }
-                }, false);
+                }
                 if (callback) callback();
             }
                 
