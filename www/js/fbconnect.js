@@ -24,18 +24,18 @@
                 app_id=obj.appId;
             }
             var loaded=0;
-            var _onLoad=function(){
-                loaded++;
-                alert("load dc");
-                if(loaded==2){
-                    if (self.cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-                    else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
-                   
-                    if (callback) callback();
-                }       
-                    
-            }
             
+            if (BKGM.loadJS)  {
+                alert("load loadJS");
+                if (self.cordova){
+                    BKGM.loadJS('cdv-plugin-fb-connect.js');
+                    BKGM.loadJS('facebook-js-sdk.js');
+                } else {
+                    BKGM.loadJS('//connect.facebook.net/en_US/all.js');
+                }
+
+               
+            }
         },
         logout:function(callback) {
             var self=this;
