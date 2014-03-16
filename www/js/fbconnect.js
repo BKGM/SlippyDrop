@@ -62,6 +62,8 @@
             FB.getLoginStatus(function(response) {
                               if (response.status == 'connected') {
                                 self.isLogin=true;
+                                if (response.authResponse) 
+                                    alert(response.authResponse.accessToken); // This will print the token
                                 if (callback) callback(response);
                               } else {
                                 self.isLogin=false;
