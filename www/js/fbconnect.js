@@ -9,9 +9,10 @@
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        return new BlobBuilder([ab], {
-            type: 'image/png'
-        });
+        var bl = new window.BlobBuilder();
+        bl.append(ab.buffer);
+        blob = bl.getBlob('image/png');
+        return blob;
     };
     BKGM.FBConnect = function(){        
         // return this;
