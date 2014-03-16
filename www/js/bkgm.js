@@ -25,7 +25,7 @@ var BKGM = BKGM||{};
                             _this.gravity = {x:eventData.accelerationIncludingGravity.y/3,y:eventData.accelerationIncludingGravity.x/3,z:eventData.accelerationIncludingGravity.z};
                     }, false);
         } else {
-            if(cordova && navigator &&  navigator.accelerometer){
+            if(this.cordova && navigator &&  navigator.accelerometer){
                  // The watch id references the current `watchAcceleration`
                 var watchID = null;
 
