@@ -1,5 +1,5 @@
 (function(){
-    var BKGM = BKGM||{}; 
+    // var BKGM = BKGM||{}; 
     // function dataURItoBlob(dataURI) {
     //     var byteString = atob(dataURI.split(',')[1]);
     //     var ab = new ArrayBuffer(byteString.length);
@@ -12,8 +12,8 @@
     //     });
     // };
     BKGM.FBConnect = function(){        
-        return this;
-    };
+        // return this;
+    }
     // BKGM.FBConnect.prototype= {
     //     init:function(obj,callback){
     //         alert("goi FBConnect");
