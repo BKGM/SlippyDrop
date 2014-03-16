@@ -46,51 +46,5 @@ alert("load FBConnect");
         };
         return this;
     }
-    BKGM.FBConnect.prototype= {
-        logout:function(callback) {
-            var self=this;
-            FB.logout(function(response) {
-                if(callback) callback(response);
-            });
-        },            
-        login:function(callback) {
-            var self=this;
-            FB.login(
-                function(response) {
-                    if (response.session) {
-                        if(callback) callback(response);
-                    } else {
-                        if(callback) callback(response);
-                    }
-                },
-                { scope: "publish_actions" }
-            );
-        },
-        getLoginStatus: function(callback) {
-            var self=this;
-            FB.getLoginStatus(function(response) {
-                              if (response.status == 'connected') {
-                                self.isLogin=true;
-                                if (callback) callback(response);
-                              } else {
-                                self.isLogin=false;
-                                if (callback) callback(false);
-                              }
-                              });
-            return this;
-        },
-        getAuthResponse: function(callback){
-            var self=this;
-            var authResponse = {};
-            this.getLoginStatus(function(response){
-                if(response && response.authResponse) {authResponse=response.authResponse; if (callback) callback(authResponse);}
-                else self.login(function(response){
-                    if(response && response.authResponse) {authResponse=response.authResponse; if (callback) callback(authResponse);}
-                })
-            })
-            return authResponse;
-        }
-        
-    };
-   
+    
 })();
