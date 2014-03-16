@@ -77,7 +77,7 @@
                   if (response.status == 'connected') {
                     if (response.authResponse && callback1) 
                         {
-                            alert(response.authResponse.accessToken);
+                            alert(response.authResponse.userID);
                             callback1(response.authResponse.accessToken,response.authResponse.userID);
                         }
                   } else {
