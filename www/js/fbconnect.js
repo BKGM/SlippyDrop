@@ -1,6 +1,7 @@
 (function(){
     var BKGM = BKGM||{};    
     BKGM.FBConnect = function(obj,callback){
+        alert("goi FBConnect");
         var app_id="296632137153437";
         if (obj){
             app_id=obj.appId;
@@ -9,7 +10,7 @@
         var _onLoad=function(){
             loaded++;alert("load dc");
             if(loaded==2){
-                
+
                 try {
                     if (cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
                     else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
