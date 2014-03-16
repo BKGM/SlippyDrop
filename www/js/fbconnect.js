@@ -24,32 +24,7 @@
                 app_id=obj.appId;
             }
             var loaded=0;
-            var _onLoad=function(){
-                loaded++;alert("load dc");
-                if(loaded==2){
-
-                    try {
-                        if (self.cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-                        else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
-                    } catch (e) {
-                        alert(e);
-                    }
-                    if (callback) callback();
-                    }       
-                    
-            }
-            if (BKGM.loadJS)  {
-                alert("load loadJS");
-                if (self.cordova){
-                    BKGM.loadJS('cdv-plugin-fb-connect.js',_onLoad);
-                    BKGM.loadJS('facebook-js-sdk.js',_onLoad);
-                } else {
-                    _onLoad();
-                    BKGM.loadJS('//connect.facebook.net/en_US/all.js',_onLoad);
-                }
-
-               
-            }
+            
         },
         logout:function(callback) {
             var self=this;
