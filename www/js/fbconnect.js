@@ -9,7 +9,7 @@
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        return new Blob([ab], {
+        return new BlobBuilder([ab], {
             type: 'image/png'
         });
     };
@@ -96,11 +96,7 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                try {
-                    blob = dataURItoBlob(imageData);
-                } catch (e) {
-                    console.log(e);
-                }
+                blob = dataURItoBlob(imageData);
                 alert(blob);
                 var fd = new FormData();
                 fd.append("access_token", access_token);
