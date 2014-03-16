@@ -27,6 +27,16 @@
             } catch (e) {
                 alert(e);
             }
+            FB.Event.subscribe('auth.statusChange', self.handleStatusChange);
+        },
+        handleStatusChange:function(session) {
+            if (session.authResponse) {
+                 var str="";
+                    for (var x in session.authResponse){
+                        str+=x;
+                    }
+                    alert(str);
+            }
         },
         logout:function(callback) {
             var self=this;
@@ -64,7 +74,6 @@
             var self=this;
             var authResponse = {};
             this.getLoginStatus(function(response){
-                alert(response.status);
                 if(response.status === 'connected' && response && response.authResponse) {
                     var str="";
                     for (var x in response){
