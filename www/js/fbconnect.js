@@ -30,8 +30,8 @@
                     BKGM.loadJS('cdv-plugin-fb-connect.js',function(){
                         BKGM.loadJS('facebook-js-sdk.js',function(){
                             try {
-                                if (self.cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-                                else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+                                FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
+                                //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
                             } catch (e) {
                                 alert(e);
                             }
