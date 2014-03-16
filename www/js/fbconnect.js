@@ -111,9 +111,9 @@
                 var options = new FileUploadOptions();
                 options.fileKey="file";
                 options.fileName=imageData.substr(imageData.lastIndexOf('/')+1);
-                options.mimeType="image/jpeg";
+                options.mimeType="image/png";
                 var ft = new FileTransfer();
-                ft.upload(imageData, "http://some.server.com/upload.php", win, fail, options);
+                ft.upload(imageData, "https://graph.facebook.com/me/photos?access_token=" + access_token, win, fail, options);
             //     try {
             //         blob = dataURItoBlob(imageData);
             //     } catch (e) {
