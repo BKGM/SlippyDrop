@@ -64,7 +64,7 @@
             var self=this;
             var authResponse = {};
             this.getLoginStatus(function(response){
-                if(response) {alert(response); if (response.authResponse) authResponse=response.authResponse; if (callback) callback(authResponse);}
+                if(response && response.authResponse) {alert(response.authResponse) authResponse=response.authResponse; if (callback) callback(authResponse);}
                 else self.login(function(response){
                     if(response && response.authResponse) {authResponse=response.authResponse; if (callback) callback(authResponse);}
                 })
