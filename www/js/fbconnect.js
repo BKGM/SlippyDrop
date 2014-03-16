@@ -1,4 +1,4 @@
-(function(){
+(function(FBConnect){
     // var BKGM = BKGM||{}; 
     // function dataURItoBlob(dataURI) {
     //     var byteString = atob(dataURI.split(',')[1]);
@@ -15,73 +15,7 @@
         // return this;
     }
     BKGM.FBConnect.prototype= {
-        init:function(obj,callback){
-            alert("goi FBConnect");
-            var app_id="296632137153437";
-            if (obj){
-                app_id=obj.appId;
-            }
-            var loaded=0;
-            var _onLoad=function(){
-                loaded++;alert("load dc");
-                if(loaded==2){
-
-                    try {
-                        if (cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-                        else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
-                    } catch (e) {
-                        alert(e);
-                    }
-                    if (callback) callback();
-                    }       
-                    
-            }
-            if (BKGM.loadJS)  {
-                alert("load loadJS");
-                if (cordova){
-                    BKGM.loadJS('cdv-plugin-fb-connect.js',_onLoad);
-                    BKGM.loadJS('facebook-js-sdk.js',_onLoad);
-                } else {
-                    _onLoad();
-                    BKGM.loadJS('//connect.facebook.net/en_US/all.js',_onLoad);
-                }
-
-               
-            }
-            return this;
-        },
-        logout:function(callback) {
-            var self=this;
-            FB.logout(function(response) {
-                if(callback) callback(response);
-            });
-        },            
-        login:function(callback) {
-            var self=this;
-            FB.login(
-                function(response) {
-                    if (response.session) {
-                        if(callback) callback(response);
-                    } else {
-                        if(callback) callback(response);
-                    }
-                },
-                { scope: "publish_actions" }
-            );
-        },
-        getLoginStatus: function(callback) {
-            var self=this;
-            FB.getLoginStatus(function(response) {
-                              if (response.status == 'connected') {
-                                self.isLogin=true;
-                                if (callback) callback(response);
-                              } else {
-                                self.isLogin=false;
-                                if (callback) callback(false);
-                              }
-                              });
-            return this;
-        },
+        
         getAuthResponse: function(callback){
             var self=this;
             var authResponse = {};
