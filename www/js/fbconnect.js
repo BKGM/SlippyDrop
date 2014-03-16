@@ -76,7 +76,10 @@
             FB.getLoginStatus(function(response) {
                   if (response.status == 'connected') {
                     if (response.authResponse && callback1) 
-                        callback1(response.authResponse.accessToken,response.authResponse.userID);
+                        {
+                            alert(response.authResponse.accessToken);
+                            callback1(response.authResponse.accessToken,response.authResponse.userID);
+                        }
                   } else {
                     self.login(function(response){
                         if(response && response.authResponse) {authResponse=response.authResponse; if (callback1) callback1(authResponse.accessToken,authResponse.userID);}
