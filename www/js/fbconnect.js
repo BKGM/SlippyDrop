@@ -63,7 +63,7 @@
                               if (response.status == 'connected') {
                                 self.isLogin=true;
                                 if (response.authResponse && callback) 
-                                    callback(response,response.authResponse);
+                                    callback(response.authResponse);
                               } else {
                                 self.isLogin=false;
                                 if (callback) callback(false);
@@ -73,20 +73,16 @@
         },
         getAuthResponse: function(callback1){
             var self=this;
-            var authResponse = {};
-            this.getLoginStatus(function(response,authResponse){
-                if(response.status === 'connected' && response && authResponse) {
-                    // var str="";
-                    // for (var x in response){
-                    //     str+=x;
-                    // }
-                    // alert(str);
-                if (callback1) callback1(authResponse.accessToken,authResponse.userID);}
-                else self.login(function(response){
-                    if(response && response.authResponse) {authResponse=response.authResponse; if (callback1) callback1(authResponse.accessToken,authResponse.userID);}
-                })
-            })
-            return authResponse;
+            FB.getLoginStatus(function(response) {
+                  if (response.status == 'connected') {
+                    if (response.authResponse && callback1) 
+                        callback1(response.authResponse.accessToken,response.authResponse.userID);
+                  } else {
+                    self.login(function(response){
+                        if(response && response.authResponse) {authResponse=response.authResponse; if (callback1) callback1(authResponse.accessToken,authResponse.userID);}
+                    })
+                  }
+                  });
         },
         postCanvas:function(message, callback) {
             this.getAuthResponse(function(access_token,uid){
