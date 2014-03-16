@@ -93,7 +93,7 @@
             fd.append("source", blob);
             fd.append("message", mess);
             try {
-                BKGM.ajax({
+                $.ajax({
                     url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
                     type: "POST",
                     data: fd,
