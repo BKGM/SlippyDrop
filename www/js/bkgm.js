@@ -348,7 +348,7 @@ var BKGM = BKGM||{};
 
         // Fire the loading
         head.appendChild(script);
-    }
+    };
     BKGM.ajax = function(obj){
         var ajax = {
             url:obj.url ? obj.url :"", //url
