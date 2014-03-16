@@ -12,19 +12,22 @@
         });
     };
     BKGM.FBConnect = function(){        
-        var self=this;
-        var app_id="296632137153437";
-        if (obj){
-            app_id=obj.appId;
-        }
-        try {
-            FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-            //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
-        } catch (e) {
-            alert(e);
-        }
+        // return this;
     }
     BKGM.FBConnect.prototype= {
+        init:function(obj,callback){
+            var self=this;
+            var app_id="296632137153437";
+            if (obj){
+                app_id=obj.appId;
+            }
+            try {
+                FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
+                //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+            } catch (e) {
+                alert(e);
+            }
+        },
         logout:function(callback) {
             var self=this;
             FB.logout(function(response) {
