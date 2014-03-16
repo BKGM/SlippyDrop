@@ -93,48 +93,59 @@
             this.getAuthResponse(function(access_token,uid){
                 var uid = authResponse.userID;
                 var access_token = authResponse.accessToken;
-                function win(r) {
-                    console.log("Code = " + r.responseCode);
-                    console.log("Response = " + r.response);
-                    console.log("Sent = " + r.bytesSent);
-                }
+                navigator.camera.getPicture(function(imageURI) {
+                                    var options = new FileUploadOptions();
+                                    options.fileKey="file";
+                                    options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1)+'.png';
+                                    options.mimeType="text/plain";
 
-                function fail(error) {
-                    alert("An error has occurred: Code = " = error.code);
-                }
+                                    var params = new Object();
+
+                                    options.params = params;
+
+                                    var ft = new FileTransfer();
+                                    ft.upload(imageURI, encodeURI("https://graph.facebook.com/me/photos?access_token=" + access_token), , function(){},  function(error){}, options);
+                                },
+                                function(message) { alert('get picture failed'); },
+                                { quality: 50, 
+                                destinationType: navigator.camera.DestinationType.FILE_URI,
+                                sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY }
+                                );
 
 
-                var canvas = document.getElementById("game");
-                var imageData = canvas.toDataURL("image/png");
-                var mess =message || "http://fb.com/BKGameMaker.com";
+                // var canvas = document.getElementById("game");
+                // var imageData = canvas.toDataURL("image/png");
+                // var mess =message || "http://fb.com/BKGameMaker.com";
 
-                function gotFS(fileSystem) {
-                    fileSystem.root.getFile("tmp_img.png", {create: true}, gotFileEntry, fail); 
-                }
+                
 
-                function gotFileEntry(fileEntry) {
-                    fileEntry.createWriter(gotFileWriter, fail);
-                }
+                
 
-                function gotFileWriter(writer) {
-                    writer.onwrite = function(evt) {
-                        console.log("write success");
-                    };
-                    writer.write(imageData);
-                }
+                
 
-                function fail(error) {
-                    console.log(error.code);
-                }
+               
 
-                window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+                // window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
+                //     fileSystem.root.getFile("tmp_img.png", {create: true}, function(fileEntry) {
+                //     fileEntry.createWriter(function(writer) {
+                //     writer.onwrite = function(evt) {
+                //         alert("write success");
+                //     };
+                //     writer.write(imageData);
+                // }, fail);
+                // }, fail); 
+                // },  function(error) {
+                //     console.log(error.code);
+                // });
 
-                var options = new FileUploadOptions();
-                options.fileKey="file";
-                options.fileName=imageData.substr(imageData.lastIndexOf('/')+1);
-                options.mimeType="image/png";
-                var ft = new FileTransfer();
-                ft.upload(imageData, "https://graph.facebook.com/me/photos?access_token=" + access_token, win, fail, options);
+                // var options = new FileUploadOptions();
+                // options.fileKey="file";
+                // options.fileName=imageData.substr(imageData.lastIndexOf('/')+1);
+                // options.mimeType="image/png";
+                // var ft = new FileTransfer();
+                // ft.upload(imageData, "https://graph.facebook.com/me/photos?access_token=" + access_token, function(){},  function(error) {
+                //     console.log(error.code);
+                // }, options);
             //     try {
             //         blob = dataURItoBlob(imageData);
             //     } catch (e) {
