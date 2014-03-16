@@ -3,7 +3,9 @@
     function dataURItoBlob(dataURI) {
         var byteString = atob(dataURI.split(',')[1]);
         var ab = new ArrayBuffer(byteString.length);
+        alert(ab);
         var ia = new Uint8Array(ab);
+        alert(ia);
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
@@ -94,13 +96,12 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                alert(imageData);
                 try {
                     blob = dataURItoBlob(imageData);
                 } catch (e) {
                     console.log(e);
                 }
-
+                alert(blob);
                 var fd = new FormData();
                 fd.append("access_token", access_token);
                 fd.append("source", blob);
