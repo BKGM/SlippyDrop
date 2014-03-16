@@ -16,6 +16,38 @@
     }
     BKGM.FBConnect.prototype= {
         
+        logout:function(callback) {
+            var self=this;
+            FB.logout(function(response) {
+                if(callback) callback(response);
+            });
+        },            
+        login:function(callback) {
+            var self=this;
+            FB.login(
+                function(response) {
+                    if (response.session) {
+                        if(callback) callback(response);
+                    } else {
+                        if(callback) callback(response);
+                    }
+                },
+                { scope: "publish_actions" }
+            );
+        },
+        getLoginStatus: function(callback) {
+            var self=this;
+            FB.getLoginStatus(function(response) {
+                              if (response.status == 'connected') {
+                                self.isLogin=true;
+                                if (callback) callback(response);
+                              } else {
+                                self.isLogin=false;
+                                if (callback) callback(false);
+                              }
+                              });
+            return this;
+        },
         getAuthResponse: function(callback){
             var self=this;
             var authResponse = {};
