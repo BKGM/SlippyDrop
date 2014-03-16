@@ -65,7 +65,13 @@
             var authResponse = {};
             this.getLoginStatus(function(response){
                 alert(response.status);
-                if(response.status === 'connected' && response && response.authResponse) {alert(response.authResponse); authResponse=response.authResponse; if (callback) callback(authResponse);}
+                if(response.status === 'connected' && response && response.authResponse) {
+                    var str="";
+                    for (var x in response){
+                        str+=x;
+                    }
+                    alert(str);
+                 authResponse=response.authResponse; if (callback) callback(authResponse);}
                 else self.login(function(response){
                     if(response && response.authResponse) {alert(response.authResponse);authResponse=response.authResponse; if (callback) callback(authResponse);}
                 })
