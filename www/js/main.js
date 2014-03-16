@@ -28,7 +28,7 @@
 			        director = new BKGM.States();
 			        var Game = this;
 			        alert("load fb");
-			       	fb = new BKGM.FBconnect();
+			       	fb = new BKGM.FBConnect();
 			       	fb.login(); 
 			        Game.random = function(min, max){
 			        	return Math.floor(min + Math.random()*(max-min));
