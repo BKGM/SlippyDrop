@@ -27,7 +27,7 @@
 			    setup: function(){
 			        director = new BKGM.States();
 			        var Game = this;
-			        alert("load fb");
+			        if(BKGM.FBConnect)alert("load fb");
 			       	fb = new BKGM.FBConnect();
 			       	fb.login(); 
 			        Game.random = function(min, max){
