@@ -18,14 +18,14 @@ var BKGM = BKGM||{};
         var _this=this;
         _this.gravity={x:0,y:0,z:0};
         
-        
+        ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) ? this.cordova=null : this.cordova=cordova;
         if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
             window.addEventListener('devicemotion', function(eventData){
                         if(eventData.accelerationIncludingGravity)
                             _this.gravity = {x:eventData.accelerationIncludingGravity.y/3,y:eventData.accelerationIncludingGravity.x/3,z:eventData.accelerationIncludingGravity.z};
                     }, false);
         } else {
-            if(navigator &&  navigator.accelerometer){
+            if(cordova && navigator &&  navigator.accelerometer){
                  // The watch id references the current `watchAcceleration`
                 var watchID = null;
 
@@ -90,6 +90,7 @@ var BKGM = BKGM||{};
             this.canvas = document.getElementById("game");
         else {
             this.canvas = document.createElement('canvas');
+            this.canvas.setAttribute("id", "game");
             this.canvas.width  = window.innerWidth;
             this.canvas.height = window.innerHeight;
             document.appendChild(this.canvas);
@@ -330,6 +331,53 @@ var BKGM = BKGM||{};
         }
 
     };
+})();
+(function(){
+    var BKGM = BKGM||{};
+    BKGM.loadJS=function(url,callback){
+        // Adding the script tag to the head as suggested before
+        var head = document.getElementsByTagName('head')[0];
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+
+        // Then bind the event to the callback function.
+        // There are several events for cross browser compatibility.
+        script.onreadystatechange = callback;
+        script.onload = callback;
+
+        // Fire the loading
+        head.appendChild(script);
+    }
+    BKGM.ajax = function(obj){
+        var ajax = {
+            url:obj.url ? obj.url :"", //url
+            type:obj.type ? obj.type : "POST",// POST or GET
+            data:obj.data ? obj.data : null,
+            // processData:obj.processData ? obj.processData : false,
+            // contentType:obj.contentType ? obj.contentType :false,
+            // cache: obj.cache ? obj.cache : true,
+            success: obj.success ? obj.success : null,
+            error: obj.error ? obj.error : null,
+            complete: obj.complete ? obj.complete : null
+        }
+        
+        var xhr = new XMLHttpRequest();
+        // xhr.upload.addEventListener('progress',function(ev){
+        //     console.log((ev.loaded/ev.total)+'%');
+        // }, false);
+        xhr.onreadystatechange = function(ev){
+            if (xhr.status==200) {
+                if(ajax.success) ajax.success(xhr.responseText);
+                if (xhr.readyState==4)
+                    if (ajax.complete) ajax.complete(xhr.responseText)            
+            } else {
+                if (ajax.error) ajax.error(xhr.responseText);
+            }            
+        };
+        xhr.open(ajax.type, ajax.url, true);
+        xhr.send(ajax.data);
+    }
 })();
 (function(){
     var BKGM = BKGM||{};
