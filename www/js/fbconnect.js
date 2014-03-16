@@ -23,13 +23,22 @@
             if (obj){
                 app_id=obj.appId;
             }
-            var loaded=0;
             
             if (BKGM.loadJS)  {
                 alert("load loadJS");
                 if (self.cordova){
-                    BKGM.loadJS('cdv-plugin-fb-connect.js');
-                    BKGM.loadJS('facebook-js-sdk.js');
+                    BKGM.loadJS('cdv-plugin-fb-connect.js',function(){
+                        BKGM.loadJS('facebook-js-sdk.js',function(){
+                            try {
+                                if (self.cordova) FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
+                                else FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+                            } catch (e) {
+                                alert(e);
+                            }
+                            if (callback) callback();
+                        });
+                    });
+                    
                 } else {
                     BKGM.loadJS('//connect.facebook.net/en_US/all.js');
                 }
