@@ -71,7 +71,7 @@
                               });
             return this;
         },
-        getAuthResponse: function(callback){
+        getAuthResponse: function(callback1){
             var self=this;
             var authResponse = {};
             this.getLoginStatus(function(response,authResponse){
@@ -81,9 +81,9 @@
                     //     str+=x;
                     // }
                     // alert(str);
-                if (callback) callback(authResponse.accessToken,authResponse.userID);}
+                if (callback1) callback1(authResponse.accessToken,authResponse.userID);}
                 else self.login(function(response){
-                    if(response && response.authResponse) {alert(response.authResponse);authResponse=response.authResponse; if (callback) callback(authResponse);}
+                    if(response && response.authResponse) {authResponse=response.authResponse; if (callback1) callback1(authResponse.accessToken,authResponse.userID);}
                 })
             })
             return authResponse;
