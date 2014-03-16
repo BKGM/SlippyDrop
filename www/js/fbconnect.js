@@ -91,100 +91,50 @@
         },
         postCanvas:function(message, callback) {
             this.getAuthResponse(function(access_token,uid){
-                var uid = authResponse.userID;
-                var access_token = authResponse.accessToken;
-                navigator.camera.getPicture(function(imageURI) {
-                                    var options = new FileUploadOptions();
-                                    options.fileKey="file";
-                                    options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1)+'.png';
-                                    options.mimeType="text/plain";
+                // var uid = authResponse.userID;
+                // var access_token = authResponse.accessToken;
+                var canvas = document.getElementById("game");
+                var imageData = canvas.toDataURL("image/png");
+                var mess =message || "http://fb.com/BKGameMaker.com";
+                try {
+                    blob = dataURItoBlob(imageData);
+                } catch (e) {
+                    console.log(e);
+                }
+                alert(blob);
+                var fd = new FormData();
+                fd.append("access_token", access_token);
+                fd.append("source", blob);
+                fd.append("message", mess);
+                try {
+                    $.ajax({
+                        url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
+                        type: "POST",
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (data) {
+                            console.log("success " + data);
+                            $("#poster").html("Posted Canvas Successfully");
+                        },
+                        error: function (shr, status, data) {
+                            console.log("error " + data + " Status " + shr.status);
+                        },
+                        complete: function () {
+                            console.log("Posted to facebook");
+                        }
+                    });
 
-                                    var params = new Object();
+                } catch (e) {
+                    console.log(e);
+                }
+            });
 
-                                    options.params = params;
-
-                                    var ft = new FileTransfer();
-                                    ft.upload(imageURI, encodeURI("https://graph.facebook.com/me/photos?access_token=" + access_token), , function(){},  function(error){}, options);
-                                },
-                                function(message) { alert('get picture failed'); },
-                                { quality: 50, 
-                                destinationType: navigator.camera.DestinationType.FILE_URI,
-                                sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY }
-                                );
-
-
-                // var canvas = document.getElementById("game");
-                // var imageData = canvas.toDataURL("image/png");
-                // var mess =message || "http://fb.com/BKGameMaker.com";
-
-                
-
-                
-
-                
-
-               
-
-                // window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-                //     fileSystem.root.getFile("tmp_img.png", {create: true}, function(fileEntry) {
-                //     fileEntry.createWriter(function(writer) {
-                //     writer.onwrite = function(evt) {
-                //         alert("write success");
-                //     };
-                //     writer.write(imageData);
-                // }, fail);
-                // }, fail); 
-                // },  function(error) {
-                //     console.log(error.code);
-                // });
-
-                // var options = new FileUploadOptions();
-                // options.fileKey="file";
-                // options.fileName=imageData.substr(imageData.lastIndexOf('/')+1);
-                // options.mimeType="image/png";
-                // var ft = new FileTransfer();
-                // ft.upload(imageData, "https://graph.facebook.com/me/photos?access_token=" + access_token, function(){},  function(error) {
-                //     console.log(error.code);
-                // }, options);
-            //     try {
-            //         blob = dataURItoBlob(imageData);
-            //     } catch (e) {
-            //         console.log(e);
-            //     }
-            //     alert(blob);
-            //     var fd = new FormData();
-            //     fd.append("access_token", access_token);
-            //     fd.append("source", blob);
-            //     fd.append("message", mess);
-            //     try {
-            //         $.ajax({
-            //             url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
-            //             type: "POST",
-            //             data: fd,
-            //             processData: false,
-            //             contentType: false,
-            //             cache: false,
-            //             success: function (data) {
-            //                 console.log("success " + data);
-            //                 $("#poster").html("Posted Canvas Successfully");
-            //             },
-            //             error: function (shr, status, data) {
-            //                 console.log("error " + data + " Status " + shr.status);
-            //             },
-            //             complete: function () {
-            //                 console.log("Posted to facebook");
-            //             }
-            //         });
-
-            //     } catch (e) {
-            //         console.log(e);
-            //     }
-            // });
-
-            // if (!this.isLogin) {
-            //     alert('Error! Not login FB');
-            //     return;
-            // }
+            if (!this.isLogin) {
+                alert('Error! Not login FB');
+                return;
+            }
 
         }
     };
