@@ -1,3 +1,4 @@
+alert("load  FBConnect");
 (function(){
     var BKGM = BKGM||{}; 
     function dataURItoBlob(dataURI) {
