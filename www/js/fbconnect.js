@@ -62,9 +62,8 @@
             FB.getLoginStatus(function(response) {
                               if (response.status == 'connected') {
                                 self.isLogin=true;
-                                if (response.authResponse) 
-                                    alert(response.authResponse.accessToken); // This will print the token
-                                if (callback) callback(response);
+                                if (response.authResponse && callback) 
+                                    callback(response,response.authResponse);
                               } else {
                                 self.isLogin=false;
                                 if (callback) callback(false);
@@ -75,14 +74,14 @@
         getAuthResponse: function(callback){
             var self=this;
             var authResponse = {};
-            this.getLoginStatus(function(response){
-                if(response.status === 'connected' && response && response.authResponse) {
-                    var str="";
-                    for (var x in response){
-                        str+=x;
-                    }
-                    alert(str);
-                 authResponse=response.authResponse; if (callback) callback(authResponse);}
+            this.getLoginStatus(function(response,authResponse){
+                if(response.status === 'connected' && response && authResponse) {
+                    // var str="";
+                    // for (var x in response){
+                    //     str+=x;
+                    // }
+                    // alert(str);
+                if (callback) callback(authResponse.accessToken,authResponse.userID);}
                 else self.login(function(response){
                     if(response && response.authResponse) {alert(response.authResponse);authResponse=response.authResponse; if (callback) callback(authResponse);}
                 })
@@ -90,9 +89,9 @@
             return authResponse;
         },
         postCanvas:function(message, callback) {
-            this.getAuthResponse(function(authResponse){
-                var uid = authResponse.userID;
-                var access_token = authResponse.accessToken;
+            this.getAuthResponse(function(access_token,uid){
+                // var uid = authResponse.userID;
+                // var access_token = authResponse.accessToken;
                 alert(uid);
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
