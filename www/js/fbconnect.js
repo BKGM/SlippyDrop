@@ -91,4 +91,6 @@ alert("load FBConnect");
             return authResponse;
         }
         
+    };
+   
 })();
