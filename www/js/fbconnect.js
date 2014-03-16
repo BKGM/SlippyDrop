@@ -13,7 +13,7 @@ alert("load FBConnect");
         });
     };
     BKGM.FBConnect = function(obj,callback){        
-        
+        alert("dinh cm");
         return this;
     }
     
