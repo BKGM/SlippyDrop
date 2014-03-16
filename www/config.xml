@@ -51,6 +51,7 @@
     <!-- 
         <gap:plugin name="com.phonegap.plugins.barcodescanner" />
     -->
+    <gap:plugin name="nl.x-services.plugins.socialsharing" />
     <gap:plugin name="com.phonegap.plugins.facebookconnect">
 	    <param name="APP_ID" value="296632137153437" />
 	    <param name="APP_NAME" value="White Drop" />
