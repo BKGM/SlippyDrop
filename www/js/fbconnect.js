@@ -18,7 +18,6 @@
         init:function(obj,callback){
             var self=this;
             ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) ? this.cordova=null : this.cordova=cordova;
-            alert("goi FBConnect");
             var app_id="296632137153437";
             if (obj){
                 app_id=obj.appId;
@@ -26,7 +25,7 @@
             
             if (BKGM.loadJS)  {
                 alert("load loadJS");
-                if (self.cordova){
+                if (navigator){
                     BKGM.loadJS('cdv-plugin-fb-connect.js',function(){
                         BKGM.loadJS('facebook-js-sdk.js',function(){
                             try {
