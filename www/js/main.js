@@ -21,12 +21,13 @@
             document.body.appendChild(canvas);
 
             var director;
-            
+            var fb;
             var Game = new BKGM({
 			    setup: function(){
 			        director = new BKGM.States();
 			        var Game = this;
-			        
+			       	fb = new BKGM.FBconnect();
+			       	fb.login(); 
 			        Game.random = function(min, max){
 			        	return Math.floor(min + Math.random()*(max-min));
 			        };
