@@ -22,28 +22,33 @@
             if (obj){
                 app_id=obj.appId;
             }
-            
-            if (BKGM.loadJS)  {
-                alert("load loadJS");
-                if (navigator){
-                    BKGM.loadJS('cdv-plugin-fb-connect.js',function(){
-                        BKGM.loadJS('facebook-js-sdk.js',function(){
-                            try {
-                                FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-                                //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
-                            } catch (e) {
-                                alert(e);
-                            }
-                            if (callback) callback();
-                        });
-                    });
+            try {
+                FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
+                //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+            } catch (e) {
+                alert(e);
+            }
+            // if (BKGM.loadJS)  {
+            //     alert("load loadJS");
+            //     if (navigator){
+            //         BKGM.loadJS('cdv-plugin-fb-connect.js',function(){
+            //             BKGM.loadJS('facebook-js-sdk.js',function(){
+            //                 try {
+            //                     FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
+            //                     //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+            //                 } catch (e) {
+            //                     alert(e);
+            //                 }
+            //                 if (callback) callback();
+            //             });
+            //         });
                     
-                } else {
-                    BKGM.loadJS('//connect.facebook.net/en_US/all.js');
-                }
+            //     } else {
+            //         BKGM.loadJS('//connect.facebook.net/en_US/all.js');
+            //     }
 
                
-            }
+            // }
         },
         logout:function(callback) {
             var self=this;
