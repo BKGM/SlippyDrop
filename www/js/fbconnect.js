@@ -195,6 +195,7 @@
                 var mess =message || "http://fb.com/BKGameMaker.com";
                 var encodedPng = imageData.substring(imageData.indexOf(',')+1,imageData.length);
                 var decodedPng = Base64Binary.decode(encodedPng);
+                alert(decodedPng);
                 // dataURItoBlob(imageData.split(',')[1],"image/png");
                 // alert(Blob);
                 // blob = binEncode(imageData.split(',')[1]);
