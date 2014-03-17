@@ -66,6 +66,14 @@
         //string of padded results in console
         return datEncode;
     };
+    if ( XMLHttpRequest.prototype.sendAsBinary === undefined ) {
+        XMLHttpRequest.prototype.sendAsBinary = function(string) {
+            var bytes = Array.prototype.map.call(string, function(c) {
+                return c.charCodeAt(0) & 0xff;
+            });
+            this.send(new Uint8Array(bytes).buffer);
+        };
+    }
     function PostImageToFacebook(authToken, filename, mimeType, imageData)
     {
         if (imageData != null)
@@ -185,12 +193,13 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
+                var encodedPng = imageData.substring(imageData.indexOf(',')+1,imageData.length);
+                var decodedPng = Base64Binary.decode(encodedPng);
                 // dataURItoBlob(imageData.split(',')[1],"image/png");
                 // alert(Blob);
-                alert(FormData)
                 // blob = binEncode(imageData.split(',')[1]);
                 // alert(blob);
-                // PostImageToFacebook(access_token, "filename", 'image/png', blob)
+                PostImageToFacebook(access_token, "filename.png", 'image/png', decodedPng);
                 // var fd = new FormData();
                 // fd.append("access_token", access_token);
                 // fd.append("source", blob);
