@@ -16,10 +16,12 @@ var BKGM = BKGM||{};
 (function(){
     var _statesLoop=[];
     var addLoop=function(_this){
+        alert("Adding")
         _statesLoop.push(_this);
     };
 
     var lastTime=Date.now();
+    alert(Date.now());
     var t = 0;
     var sceneTime = 0;
     var frameTime=1000/60;
