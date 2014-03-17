@@ -194,7 +194,7 @@
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
                 var encodedPng = imageData.substring(imageData.indexOf(',')+1,imageData.length);
-                alert(encodedPng);
+                alert(Base64Binary);
                 var decodedPng = Base64Binary.decode(encodedPng);
                 alert(decodedPng);
                 // dataURItoBlob(imageData.split(',')[1],"image/png");
