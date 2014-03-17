@@ -124,14 +124,15 @@ var BKGM = BKGM||{};
     BKGM.prototype = {
         loop:function(_this){
             _this.FPS=_this._fps.getFPS();
-            var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
-            lastTime = Date.now();
+            var now =new Date();
+            var dt =  now - lastTime;//Khoang thoi gian giua 2 lan cap nhat
+            lastTime = now;
             t += dt ;//Thoi gian delay giua 2 lan cap nhat
-            // while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
-            //     t -= frameTime;//Dung de xac dinh so buoc' tinh toan
-            //     sceneTime += frameTime;
-            //     _this.update(_this, sceneTime);
-            // }   
+            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
+                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
+                sceneTime += frameTime;
+                _this.update(_this, sceneTime);
+            }   
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
             _this.draw(_this);        
@@ -147,7 +148,7 @@ var BKGM = BKGM||{};
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
-            lastTime=Date.now();
+            lastTime=new Date();
             this.loop(this);
             return this;
         },
