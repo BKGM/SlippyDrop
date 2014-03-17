@@ -11,7 +11,9 @@
         }
         var bl = new window.BlobBuilder();
         bl.append(ab.buffer);
+        alert (bl);
         blob = bl.getBlob('image/png');
+        alert(blob);
         return blob;
     };
     BKGM.FBConnect = function(){        
