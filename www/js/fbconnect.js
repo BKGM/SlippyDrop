@@ -12,6 +12,7 @@
         },
 
         decode: function(input, arrayBuffer) {
+            alert("dadaadas");
             //get last chars to see if are valid
             var lkey1 = this._keyStr.indexOf(input.charAt(input.length-1));      
             var lkey2 = this._keyStr.indexOf(input.charAt(input.length-1));      
@@ -248,7 +249,7 @@
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
                 var encodedPng = imageData.substring(imageData.indexOf(',')+1,imageData.length);
-                alert(Base64Binary);
+                alert(encodedPng);
                 var decodedPng = Base64Binary.decode(encodedPng);
                 alert(decodedPng);
                 // dataURItoBlob(imageData.split(',')[1],"image/png");
