@@ -9,12 +9,12 @@
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        var bl = new window.BlobBuilder();
-        bl.append(ab.buffer);
-        alert (bl);
-        blob = bl.getBlob('image/png');
-        alert(blob);
-        return blob;
+        // var bl = new window.BlobBuilder();
+        // bl.append(ab.buffer);
+        // alert (bl);
+        // blob = bl.getBlob('image/png');
+        // alert(blob);
+        return ia;
     };
     function PostImageToFacebook(authToken, filename, mimeType, imageData)
     {
@@ -135,7 +135,7 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                blob = atob(imageData.split(',')[1]);
+                blob = dataURItoBlob(imageData);
                 alert(blob);
                 // PostImageToFacebook(authToken, filename, mimeType, imageData)
                 // var fd = new FormData();
