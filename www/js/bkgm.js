@@ -14,36 +14,10 @@ HEIGHT = window.innerHeight;
 SCALE = WIDTH/768;
 var BKGM = BKGM||{};
 (function(){
-    var _statesLoop=[];
-    var addLoop=function(_this){
-        alert("Adding")
-        _statesLoop.push(_this);
-    };
-
-    var lastTime=Date.now();
+    var lastTime=0;
     var t = 0;
     var sceneTime = 0;
     var frameTime=1000/60;
-
-    var _loop = function(){
-        alert("_loop")
-        for (var i = _statesLoop.length - 1; i >= 0; i--) {
-            var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
-            lastTime = Date.now();
-            t += dt ;//Thoi gian delay giua 2 lan cap nhat
-            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
-                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
-                sceneTime += frameTime;
-                _statesLoop[i].update(_statesLoop[i], sceneTime);
-            }            
-            _statesLoop[i].loop();
-            alert("aasf")
-        };
-        requestAnimFrame(function(){
-            _loop();
-        });
-    }
-    _loop();
     BKGM = function(obj){
         var _this=this;
         _this.gravity={x:0,y:0,z:0};
@@ -150,9 +124,20 @@ var BKGM = BKGM||{};
     BKGM.prototype = {
         loop:function(_this){
             _this.FPS=_this._fps.getFPS();
+            var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
+            lastTime = Date.now();
+            t += dt ;//Thoi gian delay giua 2 lan cap nhat
+            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
+                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
+                sceneTime += frameTime;
+                _this.update(_this, sceneTime);
+            }   
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
-            _this.draw(_this);            
+            _this.draw(_this);        
+            requestAnimFrame(function(){
+                _this.loop(_this);
+            });
             return _this;
         },
         run:function(){
@@ -162,7 +147,8 @@ var BKGM = BKGM||{};
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
-            addLoop(this);
+            lastTime=Date.now();
+            this.loop(this);
             return this;
         },
         setup:function(){
