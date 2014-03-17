@@ -16,6 +16,51 @@
         // alert(blob);
         return ia;
     };
+    function binEncode(data) {
+
+        //array holds the initial set of un-padded binary results
+        var binArray = []
+
+        //the string to hold the padded results
+        var datEncode = "";
+
+        //encode each character in data to it's binary equiv and push it into an array
+        for (i=0; i < data.length; i++) {
+        binArray.push(data[i].charCodeAt(0).toString(2));
+
+        }
+
+        //loop through binArray to pad each binary entry.
+        for (j=0; j < binArray.length; j++) {
+        //pad the binary result with zeros to the left to ensure proper 8 bit binary
+        var pad = padding_left(binArray[j], '0', 8);
+
+        //append each result into a string
+        datEncode += pad + ' ';
+
+        }
+
+        //function to check if each set is encoded to 8 bits, padd the left with zeros if not.
+
+        function padding_left(s, c, n) {
+        if (! s || ! c || s.length >= n) {
+        return s;
+        }
+
+        var max = (n - s.length)/c.length;
+        for (var i = 0; i < max; i++) {
+        s = c + s;
+        }
+
+        return s;
+        }
+
+        //print array of unpadded results in console
+        console.log(binArray);
+
+        //string of padded results in console
+        return datEncode;
+    };
     function PostImageToFacebook(authToken, filename, mimeType, imageData)
     {
         if (imageData != null)
@@ -135,7 +180,7 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                blob = dataURItoBlob(imageData);
+                blob = binEncode(imageData);
                 alert(blob);
                 // PostImageToFacebook(authToken, filename, mimeType, imageData)
                 // var fd = new FormData();
