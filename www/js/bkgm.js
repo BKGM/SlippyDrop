@@ -21,12 +21,12 @@ var BKGM = BKGM||{};
     };
 
     var lastTime=Date.now();
-    alert(Date.now());
     var t = 0;
     var sceneTime = 0;
     var frameTime=1000/60;
 
     var _loop = function(){
+        alert("_loop")
         for (var i = _statesLoop.length - 1; i >= 0; i--) {
             var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
             lastTime = Date.now();
