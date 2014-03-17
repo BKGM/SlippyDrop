@@ -5,7 +5,7 @@
         // doesn't handle URLEncoded DataURIs
 
         var byteString = window.atob(dataURI);
-
+        alert(byteString)
         // separate out the mime component
 
 
@@ -185,7 +185,7 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                dataURItoBlob(imageData.split(',')[1]);
+                dataURItoBlob(imageData.split(',')[1],"image/png");
                 // alert(Blob);
 
                 // blob = binEncode(imageData.split(',')[1]);
