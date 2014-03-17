@@ -35,6 +35,7 @@ var BKGM = BKGM||{};
                 _statesLoop[i].update(_statesLoop[i], sceneTime);
             }            
             _statesLoop[i].loop();
+            alert("aasf")
         };
         requestAnimFrame(function(){
             _loop();
