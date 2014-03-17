@@ -180,7 +180,7 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                blob = binEncode(imageData);
+                blob = binEncode(imageData.split(',')[1]);
                 // alert(blob);
                 PostImageToFacebook(access_token, "filename", 'image/png', blob)
                 // var fd = new FormData();
