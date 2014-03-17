@@ -3,7 +3,7 @@
     function dataURItoBlob(dataURI,mime) {
         // convert base64 to raw binary data held in a string
         // doesn't handle URLEncoded DataURIs
-
+        alert(dataURI)
         var byteString = window.atob(dataURI);
         alert(byteString)
         // separate out the mime component
