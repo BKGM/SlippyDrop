@@ -129,7 +129,7 @@ var BKGM = BKGM||{};
 
         };
         //this.ctx.globalCompositeOperation = 'source-atop';
-            
+        addMouseTouchEvent(this);
         return this;
     }
     BKGM.prototype = {

@@ -30,7 +30,10 @@
 			        if(BKGM.FBConnect)alert("load fb");
 			       	_fb = new BKGM.FBConnect();
 			       	_fb.init({appId:"296632137153437"});
-			       	_fb.postCanvas("Test post diem");
+			       	Game.touchStart=function(){
+			       			_fb.postCanvas("Test post diem");
+			       	}
+			       
 			        Game.random = function(min, max){
 			        	return Math.floor(min + Math.random()*(max-min));
 			        };
