@@ -165,7 +165,6 @@
                   if (response.status == 'connected') {
                     if (response.authResponse && callback1) 
                         {
-                            alert(response.authResponse.userId);
                             callback1(response.authResponse.accessToken,response.authResponse.userId);
                         }
                   } else {

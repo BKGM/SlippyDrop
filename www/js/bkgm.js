@@ -18,6 +18,19 @@ var BKGM = BKGM||{};
     var t = 0;
     var sceneTime = 0;
     var frameTime=1000/60;
+    var _statesLoop=[];
+    var addLoop = function(_this){
+        _statesLoop.push(_this);
+    };
+    var _loop = function(){
+        for (var i = _statesLoop.length - 1; i >= 0; i--) {
+            _statesLoop[i]._loop(_statesLoop[i]);
+        };
+        requestAnimFrame(function(){
+            _loop();
+        });
+    };
+    _loop();
     BKGM = function(obj){
         var _this=this;
         _this.gravity={x:0,y:0,z:0};
@@ -136,9 +149,6 @@ var BKGM = BKGM||{};
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
             _this.draw(_this);        
-            requestAnimFrame(function(){
-                _this.loop(_this);
-            });
             return _this;
         },
         run:function(){
@@ -149,7 +159,7 @@ var BKGM = BKGM||{};
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
             lastTime=new Date();
-            this.loop(this);
+            addLoop(this);
             return this;
         },
         setup:function(){
