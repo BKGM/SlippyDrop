@@ -181,8 +181,8 @@
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
                 blob = binEncode(imageData);
-                alert(blob);
-                // PostImageToFacebook(authToken, filename, mimeType, imageData)
+                // alert(blob);
+                PostImageToFacebook(access_token, "filename", 'image/png', blob)
                 // var fd = new FormData();
                 // fd.append("access_token", access_token);
                 // fd.append("source", blob);
