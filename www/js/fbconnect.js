@@ -16,6 +16,42 @@
         alert(blob);
         return blob;
     };
+    function PostImageToFacebook(authToken, filename, mimeType, imageData)
+    {
+        if (imageData != null)
+        {
+            //Prompt the user to enter a message
+            //If the user clicks on OK button the window method prompt() will return entered value from the text box. 
+            //If the user clicks on the Cancel button the window method prompt() returns null.
+            var message = prompt('Facebook', 'Enter a message');
+
+            if (message != null)
+            {
+                // this is the mult
+                // let's encode ouripart/form-data boundary we'll use
+                var boundary = '----ThisIsTheBoundary1234567890';
+                var formData = '--' + boundary + '\r\n'
+                formData += 'Content-Disposition: form-data; name="source"; filename="' + filename + '"\r\n';
+                formData += 'Content-Type: ' + mimeType + '\r\n\r\n';
+                for (var i = 0; i < imageData.length; ++i)
+                {
+                    formData += String.fromCharCode(imageData[ i ] & 0xff);
+                }
+                formData += '\r\n';
+                formData += '--' + boundary + '\r\n';
+                formData += 'Content-Disposition: form-data; name="message"\r\n\r\n';
+                formData += message + '\r\n'
+                formData += '--' + boundary + '--\r\n';
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://graph.facebook.com/me/photos?access_token=' + authToken, true);
+                xhr.onload = xhr.onerror = function() {
+                };
+                xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+                xhr.sendAsBinary(formData);
+            }
+        }
+    };
     BKGM.FBConnect = function(){        
         // return this;
     }
@@ -99,41 +135,39 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                blob = dataURItoBlob(imageData);
+                blob = atob(imageData.split(',')[1]);
                 alert(blob);
-                var fd = new FormData();
-                fd.append("access_token", access_token);
-                fd.append("source", blob);
-                fd.append("message", mess);
-                try {
-                    $.ajax({
-                        url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
-                        type: "POST",
-                        data: fd,
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        success: function (data) {
-                            console.log("success " + data);
-                            $("#poster").html("Posted Canvas Successfully");
-                        },
-                        error: function (shr, status, data) {
-                            console.log("error " + data + " Status " + shr.status);
-                        },
-                        complete: function () {
-                            console.log("Posted to facebook");
-                        }
-                    });
+                // PostImageToFacebook(authToken, filename, mimeType, imageData)
+                // var fd = new FormData();
+                // fd.append("access_token", access_token);
+                // fd.append("source", blob);
+                // fd.append("message", mess);
+                // try {
+                //     $.ajax({
+                //         url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
+                //         type: "POST",
+                //         data: fd,
+                //         processData: false,
+                //         contentType: false,
+                //         cache: false,
+                //         success: function (data) {
+                //             console.log("success " + data);
+                //             $("#poster").html("Posted Canvas Successfully");
+                //         },
+                //         error: function (shr, status, data) {
+                //             console.log("error " + data + " Status " + shr.status);
+                //         },
+                //         complete: function () {
+                //             console.log("Posted to facebook");
+                //         }
+                //     });
 
-                } catch (e) {
-                    console.log(e);
-                }
+                // } catch (e) {
+                //     console.log(e);
+                // }
             });
 
-            if (!this.isLogin) {
-                alert('Error! Not login FB');
-                return;
-            }
+            
 
         }
     };
