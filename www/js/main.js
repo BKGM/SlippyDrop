@@ -22,12 +22,11 @@
 
             var director;
             var _fb;
-            alert("load  25");
             var Game = new BKGM({
 			    setup: function(){
 			        director = new BKGM.States();
 			        var Game = this;
-			        if(BKGM.FBConnect)alert("load fb");
+			        if(BKGM.FBConnect)
 			       	_fb = new BKGM.FBConnect();
 			       	_fb.init({appId:"296632137153437"});
 			       	Game.touchStart=function(){

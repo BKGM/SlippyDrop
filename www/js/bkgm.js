@@ -14,6 +14,33 @@ HEIGHT = window.innerHeight;
 SCALE = WIDTH/768;
 var BKGM = BKGM||{};
 (function(){
+    var _statesLoop=[];
+    var addLoop=function(_this){
+        _statesLoop.push(_this);
+    };
+
+    var lastTime=Date.now();
+    var t = 0;
+    var sceneTime = 0;
+    var frameTime=1000/60;
+
+    var _loop = function(){
+        for (var i = _statesLoop.length - 1; i >= 0; i--) {
+            var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
+            lastTime = Date.now();
+            t += dt ;//Thoi gian delay giua 2 lan cap nhat
+            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
+                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
+                sceneTime += frameTime;
+                _statesLoop[i].update(_statesLoop[i], sceneTime);
+            }            
+            _statesLoop[i].loop();
+        };
+        requestAnimFrame(function(){
+            _loop();
+        });
+    }
+    _loop();
     BKGM = function(obj){
         var _this=this;
         _this.gravity={x:0,y:0,z:0};
@@ -36,7 +63,7 @@ var BKGM = BKGM||{};
                 //
                 function startWatch() {
 
-                    // Update acceleration every 3 seconds
+                    // Update acceleration every 1000/60 seconds
                     var options = { frequency: 1000/60 };
 
                     watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
@@ -51,22 +78,6 @@ var BKGM = BKGM||{};
                     }
                 }
 
-               /* // onSuccess: Get a snapshot of the current acceleration
-                //
-                function onSuccess(acceleration) {
-                    var element = document.getElementById('accelerometer');
-
-                    element.innerHTML = 'Acceleration X: ' + acceleration.x + '<br />' +
-                                        'Acceleration Y: ' + acceleration.y + '<br />' +
-                                        'Acceleration Z: ' + acceleration.z + '<br />' +
-                                        'Timestamp: '      + acceleration.timestamp + '<br />';
-                }
-
-                // onError: Failed to get the acceleration
-                //
-                function onError() {
-                    alert('onError!');
-                }*/
 
                 function onSuccess(acceleration) {
                     _this.gravity = {x:acceleration.x/3,y:acceleration.y/3,z:acceleration.z};
@@ -84,6 +95,7 @@ var BKGM = BKGM||{};
         
         if(obj){
             this.setup=obj.setup||this.setup;
+            this.update=obj.update||this.update;
             this.draw=obj.draw||this.draw;
         }
         if (document.getElementById("game"))
@@ -135,13 +147,9 @@ var BKGM = BKGM||{};
     BKGM.prototype = {
         loop:function(_this){
             _this.FPS=_this._fps.getFPS();
-            
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
-            _this.draw();        
-            requestAnimFrame(function(){
-                _this.loop(_this);
-            });
+            _this.draw(_this);            
             return _this;
         },
         run:function(){
@@ -151,10 +159,13 @@ var BKGM = BKGM||{};
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
-            this.loop(this);
+            addLoop(this);
             return this;
         },
         setup:function(){
+            return this;
+        },
+        update:function(){
             return this;
         },
         draw:function(){

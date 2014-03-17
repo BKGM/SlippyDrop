@@ -12,7 +12,6 @@
         },
 
         decode: function(input, arrayBuffer) {
-            alert("dadaadas");
             //get last chars to see if are valid
             var lkey1 = this._keyStr.indexOf(input.charAt(input.length-1));      
             var lkey2 = this._keyStr.indexOf(input.charAt(input.length-1));      
@@ -55,72 +54,7 @@
     };
 
     // var BKGM = BKGM||{}; 
-    function dataURItoBlob(dataURI,mime) {
-        // convert base64 to raw binary data held in a string
-        // doesn't handle URLEncoded DataURIs
-        alert(dataURI)
-        var byteString = window.atob(dataURI);
-        alert(byteString)
-        // separate out the mime component
-
-
-        // write the bytes of the string to an ArrayBuffer
-        //var ab = new ArrayBuffer(byteString.length);
-        var ia = new Uint8Array(byteString.length);
-        for (var i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-
-        // write the ArrayBuffer to a blob, and you're done
-        var blob = new Blob([ia], { type: mime });
-        alert(blob);
-        return blob;
-    };
-    function binEncode(data) {
-
-        //array holds the initial set of un-padded binary results
-        var binArray = []
-
-        //the string to hold the padded results
-        var datEncode = "";
-
-        //encode each character in data to it's binary equiv and push it into an array
-        for (i=0; i < data.length; i++) {
-        binArray.push(data[i].charCodeAt(0).toString(2));
-
-        }
-
-        //loop through binArray to pad each binary entry.
-        for (j=0; j < binArray.length; j++) {
-        //pad the binary result with zeros to the left to ensure proper 8 bit binary
-        var pad = padding_left(binArray[j], '0', 8);
-
-        //append each result into a string
-        datEncode += pad + ' ';
-
-        }
-
-        //function to check if each set is encoded to 8 bits, padd the left with zeros if not.
-
-        function padding_left(s, c, n) {
-        if (! s || ! c || s.length >= n) {
-        return s;
-        }
-
-        var max = (n - s.length)/c.length;
-        for (var i = 0; i < max; i++) {
-        s = c + s;
-        }
-
-        return s;
-        }
-
-        //print array of unpadded results in console
-        console.log(binArray);
-
-        //string of padded results in console
-        return datEncode;
-    };
+    
     if ( XMLHttpRequest.prototype.sendAsBinary === undefined ) {
         XMLHttpRequest.prototype.sendAsBinary = function(string) {
             var bytes = Array.prototype.map.call(string, function(c) {
@@ -250,38 +184,8 @@
                 var mess =message || "http://fb.com/BKGameMaker.com";
                 var encodedPng = imageData.substring(imageData.indexOf(',')+1,imageData.length);
                 var decodedPng = Base64Binary.decode(encodedPng);
-                // dataURItoBlob(imageData.split(',')[1],"image/png");
-                // alert(Blob);
-                // blob = binEncode(imageData.split(',')[1]);
-                // alert(blob);
                 PostImageToFacebook(access_token, "filename.png", 'image/png', decodedPng);
-                // var fd = new FormData();
-                // fd.append("access_token", access_token);
-                // fd.append("source", blob);
-                // fd.append("message", mess);
-                // try {
-                //     $.ajax({
-                //         url: "https://graph.facebook.com/me/photos?access_token=" + access_token,
-                //         type: "POST",
-                //         data: fd,
-                //         processData: false,
-                //         contentType: false,
-                //         cache: false,
-                //         success: function (data) {
-                //             console.log("success " + data);
-                //             $("#poster").html("Posted Canvas Successfully");
-                //         },
-                //         error: function (shr, status, data) {
-                //             console.log("error " + data + " Status " + shr.status);
-                //         },
-                //         complete: function () {
-                //             console.log("Posted to facebook");
-                //         }
-                //     });
-
-                // } catch (e) {
-                //     console.log(e);
-                // }
+              
             });
 
             
