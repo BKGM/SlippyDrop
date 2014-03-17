@@ -185,32 +185,7 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                try{
-                        blob = dataURItoBlob(imageData,"image/png");
-                }catch(e){console.log(e);}
-                var fd = new FormData();
-                fd.append("access_token",access_token);
-                fd.append("source", blob);fd.append("message","Kiss");
-                try{
-                   $.ajax({
-                        url:"https://graph.facebook.com/" + uid + "/photos?access_token=" + access_token,
-                        type:"POST"
-                        data:fd,
-                        processData:false,
-                        contentType:false,
-                        cache:false,
-                        success:function(data){
-                            alert("success " + data);
-                        },
-                        error:function(shr,status,data){
-                            console.log("error " + data + " Status " + shr.status);
-                        },
-                        complete:function(){
-                            console.log("Ajax Complete");
-                        }
-                    });
-
-                }catch(e){console.log(e);}
+                alert(Blob);
 
                 // blob = binEncode(imageData.split(',')[1]);
                 // alert(blob);
