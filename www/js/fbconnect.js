@@ -18,7 +18,7 @@
 
         // write the ArrayBuffer to a blob, and you're done
         var blob = new Blob([ia], { type: mime });
-
+        alert(blob);
         return blob;
     };
     function binEncode(data) {
@@ -185,7 +185,8 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                alert(Blob);
+                dataURItoBlob(imageData.split(',')[1]);
+                // alert(Blob);
 
                 // blob = binEncode(imageData.split(',')[1]);
                 // alert(blob);
