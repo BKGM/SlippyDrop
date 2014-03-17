@@ -124,9 +124,9 @@ var BKGM = BKGM||{};
     BKGM.prototype = {
         loop:function(_this){
             _this.FPS=_this._fps.getFPS();
-            // var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
-            // lastTime = Date.now();
-            // t += dt ;//Thoi gian delay giua 2 lan cap nhat
+            var dt = Date.now() - lastTime;//Khoang thoi gian giua 2 lan cap nhat
+            lastTime = Date.now();
+            t += dt ;//Thoi gian delay giua 2 lan cap nhat
             // while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
             //     t -= frameTime;//Dung de xac dinh so buoc' tinh toan
             //     sceneTime += frameTime;
@@ -147,7 +147,7 @@ var BKGM = BKGM||{};
             this.setup();
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);
-            // lastTime=Date.now();
+            lastTime=Date.now();
             this.loop(this);
             return this;
         },
