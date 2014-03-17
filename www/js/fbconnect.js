@@ -1,20 +1,25 @@
 (function(FBConnect){
     // var BKGM = BKGM||{}; 
-    function dataURItoBlob(dataURI) {
-        var byteString = atob(dataURI.split(',')[1]);
-        var ab = new ArrayBuffer(byteString.length);
-        alert(ab);
-        var ia = new Uint8Array(ab);
-        alert(ia);
+    function dataURItoBlob(dataURI,mime) {
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs
+
+        var byteString = window.atob(dataURI);
+
+        // separate out the mime component
+
+
+        // write the bytes of the string to an ArrayBuffer
+        //var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(byteString.length);
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        // var bl = new window.BlobBuilder();
-        // bl.append(ab.buffer);
-        // alert (bl);
-        // blob = bl.getBlob('image/png');
-        // alert(blob);
-        return ia;
+
+        // write the ArrayBuffer to a blob, and you're done
+        var blob = new Blob([ia], { type: mime });
+
+        return blob;
     };
     function binEncode(data) {
 
@@ -180,9 +185,36 @@
                 var canvas = document.getElementById("game");
                 var imageData = canvas.toDataURL("image/png");
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                blob = binEncode(imageData.split(',')[1]);
+                try{
+                        blob = dataURItoBlob(imageData,"image/png");
+                }catch(e){console.log(e);}
+                var fd = new FormData();
+                fd.append("access_token",access_token);
+                fd.append("source", blob);fd.append("message","Kiss");
+                try{
+                   $.ajax({
+                        url:"https://graph.facebook.com/" + uid + "/photos?access_token=" + access_token,
+                        type:"POST"
+                        data:fd,
+                        processData:false,
+                        contentType:false,
+                        cache:false,
+                        success:function(data){
+                            alert("success " + data);
+                        },
+                        error:function(shr,status,data){
+                            console.log("error " + data + " Status " + shr.status);
+                        },
+                        complete:function(){
+                            console.log("Ajax Complete");
+                        }
+                    });
+
+                }catch(e){console.log(e);}
+
+                // blob = binEncode(imageData.split(',')[1]);
                 // alert(blob);
-                PostImageToFacebook(access_token, "filename", 'image/png', blob)
+                // PostImageToFacebook(access_token, "filename", 'image/png', blob)
                 // var fd = new FormData();
                 // fd.append("access_token", access_token);
                 // fd.append("source", blob);
