@@ -78,4 +78,3 @@ var Base64Binary = {
 		return uarray;	
 	}
 };
-alert("Base64Binary");
