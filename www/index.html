@@ -3,7 +3,7 @@
   <head>
    <title>tittle</title>
    <script>
-     window.location='./main.html';
+     window.location= ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) ? './web.html' : './main.html';
    </script>
   <body>
   </body>

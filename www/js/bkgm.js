@@ -13,6 +13,7 @@ WIDTH = window.innerWidth;
 HEIGHT = window.innerHeight;
 SCALE = WIDTH/768;
 var BKGM = BKGM||{};
+var _isCordova;
 (function(){
     var lastTime=0;
     var t = 0;
@@ -24,23 +25,34 @@ var BKGM = BKGM||{};
     };
     var _loop = function(){
         for (var i = _statesLoop.length - 1; i >= 0; i--) {
-            _statesLoop[i]._loop(_statesLoop[i]);
+            var now =new Date();
+            var dt =  now - lastTime;//Khoang thoi gian giua 2 lan cap nhat
+            lastTime = now;
+            t += dt ;//Thoi gian delay giua 2 lan cap nhat
+            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
+                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
+                sceneTime += frameTime;
+                _statesLoop[i].update(_statesLoop[i], sceneTime);
+            }   
+            _statesLoop[i].loop(_statesLoop[i]);
         };
         requestAnimFrame(function(){
             _loop();
         });
     };
-    _loop();
+    
     BKGM = function(obj){
         var _this=this;
         _this.gravity={x:0,y:0,z:0};
         
-        ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) ? this.cordova=null : this.cordova=cordova;
+        ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) ? _isCordova=false : _isCordova=true;
         if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
             window.addEventListener('devicemotion', function(eventData){
                         if(eventData.accelerationIncludingGravity)
                             _this.gravity = {x:eventData.accelerationIncludingGravity.y/3,y:eventData.accelerationIncludingGravity.x/3,z:eventData.accelerationIncludingGravity.z};
+
                     }, false);
+
         } else {
             if(navigator &&  navigator.accelerometer){
                  // The watch id references the current `watchAcceleration`
@@ -88,6 +100,7 @@ var BKGM = BKGM||{};
             this.update=obj.update||this.update;
             this.draw=obj.draw||this.draw;
         }
+        this.resource={};
         if (document.getElementById("game"))
             this.canvas = document.getElementById("game");
         else {
@@ -104,13 +117,13 @@ var BKGM = BKGM||{};
         this.ctx.imageSmoothingEnabled= true;
         this.ctx.mozImageSmoothingEnabled= true;
         this.ctx.webkitImageSmoothingEnabled= true;
-        this._circle = document.createElement('canvas');
-        this._circle.width=200;
-        this._circle.height=200;
-        var _ctx = this._circle.getContext('2d');
-        _ctx.arc(100,100,100,0,Math.PI*2);
-        _ctx.fillStyle='#fff';
-        _ctx.fill();
+        // this._circle = document.createElement('canvas');
+        // this._circle.width=200;
+        // this._circle.height=200;
+        // var _ctx = this._circle.getContext('2d');
+        // _ctx.arc(100,100,100,0,Math.PI*2);
+        // _ctx.fillStyle='#fff';
+        // _ctx.fill();
        
         this._fps = {
             startTime : 0,
@@ -136,16 +149,7 @@ var BKGM = BKGM||{};
     }
     BKGM.prototype = {
         loop:function(_this){
-            _this.FPS=_this._fps.getFPS();
-            var now =new Date();
-            var dt =  now - lastTime;//Khoang thoi gian giua 2 lan cap nhat
-            lastTime = now;
-            t += dt ;//Thoi gian delay giua 2 lan cap nhat
-            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
-                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
-                sceneTime += frameTime;
-                _this.update(_this, sceneTime);
-            }   
+            _this.FPS=_this._fps.getFPS();            
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
             _this.draw(_this);        
@@ -156,10 +160,13 @@ var BKGM = BKGM||{};
             HEIGHT  = this.canvas.height;
             SCALE = HEIGHT/1152;
             this.setup();
-            this.ctx.translate(0, this.canvas.height);
-            this.ctx.scale(1,-1);
+            if(this.Codea){
+                this.ctx.translate(0, this.canvas.height);
+                this.ctx.scale(1,-1);
+            }            
             lastTime=new Date();
             addLoop(this);
+            _loop();
             return this;
         },
         setup:function(){
@@ -241,7 +248,11 @@ var BKGM = BKGM||{};
             this._strokeColor=color;
             this._strokeWidth=width;
             return this;
+        },
+        addRes:function(res){
+            this.resource=res;
         }
+        
     }
     var addMouseTouchEvent= function(_this){
         _this.currentTouch={ state:"ENDED" };
@@ -391,7 +402,29 @@ var BKGM = BKGM||{};
     }
 })();
 (function(){
-    var BKGM = BKGM||{};
+    BKGM.preload=function(){
+        this.audios={};
+        this.images={};
+        this._elementLoad=0;
+    };
+    BKGM.preload.prototype.load=function(type,name,url,callback){
+            var self=this;
+            this._elementLoad++;
+            if (type==="image"){
+                var image=new Image();
+                image.src=url;
+                self.images[name]=image;
+                image.onload=function(){                   
+                        if (callback) callback();
+                }
+            }
+            if(type==="audio"){
+                var audio=new BKGM.Audio().setAudio(url);
+                self.audios[name]=audio;
+                if (callback) callback();
+            }
+            return this;
+        }
     BKGM.loadImages = function(arr,callback){
         var self=this;
         var loaded=0;
@@ -406,18 +439,71 @@ var BKGM = BKGM||{};
             }
         };
     };
+})();
+(function(){
     BKGM.Sprite = function(obj){
         if(obj){
-            this.image=obj.image||this.image;
+            this.image=obj.image||this.image;            
             this.rows=obj.rows||this.rows;
             this.columns=obj.columns||this.columns;
+            this.maxIndex=this.columns*this.rows-2;
+            this.width=this.image.width/this.columns;
+            this.height=this.image.height/this.rows;
         }
     }
     BKGM.Sprite.prototype= {
         rows:1,
         columns:1,
         image:null,
-        changeFPS:200
+        // changeFS:200,
+        lastTime:0,
+        animation:{},
+        init:function(_actor){
+            this.actor=_actor;            
+            // this.frame=0;
+            this.posX=0;
+            this.posY=0;
+            lastTime= new Date();
+            return this;
+        },
+        addAnimation:function(name, arr, time, endfn){
+            this.animation[name]={arr:arr,time:time};
+            this.endfn=endfn;
+            return this;
+        },
+        playAnimation:function(name){
+            this.currentAnimation=this.animation[name];
+            this.animationIndex=0;
+            this.index=this.currentAnimation.arr[0];
+            return this;
+        },
+        switchAnimationIndex:function(index){
+            var self = this;
+            this.state = {x:index%self.columns,y:index/self.rows>>0};
+        },        
+        draw:function(Game){
+            var now=new Date();
+            var dt = now - this.lastTime;
+            if (dt > this.currentAnimation.time){
+                if(this.animationIndex<this.maxIndex){
+                     this.lastTime = now;
+                    
+                    var index=this.currentAnimation.arr[this.animationIndex];
+                    this.switchAnimationIndex(index);
+                    this.posX=this.width*this.state.x;
+                    this.posY=this.height*this.state.y;
+                    this.animationIndex++;
+                } else if (this.animationIndex==this.maxIndex){
+                    if (this.endfn) 
+                        if (this.endfn=="loop") {
+                            this.animationIndex=0;
+                            this.index=this.currentAnimation.arr[0];
+                        } else this.endfn();
+                }
+               
+            }
+            Game.ctx.drawImage(this.image,this.posX,this.posY,this.width,this.height,this.actor.x,this.actor.y,this.width,this.height)
+        }
     };
 })();
 

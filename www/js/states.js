@@ -4,6 +4,7 @@
         this.once    = false;
         this.states  = { default : [] };
         this.tasks   = {};
+        // this.task    = new BKGM.Task();
     }
     BKGM.States.prototype = {
         state: function (name, tasks) {
@@ -33,5 +34,10 @@
             this.current = state;
             if (runNow == true) self:run();
         }
+    }
+})();
+(function(){
+    BKGM.Task = function(name, fn){
+        this.tasks[name] = fn;
     }
 })();

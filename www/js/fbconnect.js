@@ -63,7 +63,7 @@
             this.send(new Uint8Array(bytes).buffer);
         };
     }
-    function PostImageToFacebook(authToken, filename, mimeType, imageData)
+    function PostImageToFacebook(authToken, filename, mimeType, imageData, obj)
     {
         if (imageData != null)
         {
@@ -74,6 +74,11 @@
 
             if (message != null)
             {
+                var ajax = {
+                    success: obj.success ? obj.success : null,
+                    error: obj.error ? obj.error : null,
+                    complete: obj.complete ? obj.complete : null
+                }
                 // this is the mult
                 // let's encode ouripart/form-data boundary we'll use
                 var boundary = '----ThisIsTheBoundary1234567890';
@@ -92,7 +97,14 @@
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'https://graph.facebook.com/me/photos?access_token=' + authToken, true);
-                xhr.onload = xhr.onerror = function() {
+                xhr.onreadystatechange = function(ev){
+                    if (xhr.status==200) {
+                        if(ajax.success) ajax.success(xhr.responseText);
+                        if (xhr.readyState==4)
+                            if (ajax.complete) ajax.complete(xhr.responseText)            
+                    } else {
+                        if (ajax.error) ajax.error(xhr.responseText);
+                    }            
                 };
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
                 xhr.sendAsBinary(formData);
@@ -110,12 +122,12 @@
                 app_id=obj.appId;
             }
             try {
-                FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false });
-                //FB.init({ appId: app_id,status: true,xfbml: truecookie: true,frictionlessRequests: true,oauth: true});
+                _isCordova ? FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false }) : FB.init({ appId: app_id,status: true,xfbml: true,cookie: true,frictionlessRequests: true,oauth: true});
+                
             } catch (e) {
                 alert(e);
             }
-            FB.Event.subscribe('auth.statusChange', self.handleStatusChange);
+            // FB.Event.subscribe('auth.statusChange', self.handleStatusChange);
         },
         handleStatusChange:function(session) {
             if (session.authResponse) {

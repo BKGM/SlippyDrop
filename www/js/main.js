@@ -1,15 +1,22 @@
 (function(){
+
 	// Wait for device API libraries to load
             //
             document.addEventListener("deviceready", onDeviceReady, false);
+            window.addEventListener("load", onDeviceReady, false);
 
             // device APIs are available
             //
-            function onDeviceReady() {
-                windowLoad();
+            function onDeviceReady() { 
+            	var preload= new BKGM.preload();           	
+				preload.load("image","chim","img/chimdo.png",function(){
+					windowLoad(preload);  
+				});
+            	           
+               
             }
 	// window.onload=function(){
-        function windowLoad() {
+        function windowLoad(preload) {
    //      	if (navigator.isCocoonJS) {
 			//     CocoonJS.App.setAntialias(true);
 			// }
@@ -22,10 +29,16 @@
 
             var director;
             var _fb;
+            
+            
             var Game = new BKGM({
 			    setup: function(){
 			        director = new BKGM.States();
 			        var Game = this;
+			        Game.Codea=true;
+			        Game.addRes(preload);
+			        var sprite = new BKGM.Sprite({image:Game.resource.images["chim"],rows:2,columns:2}).addAnimation("run",[0,1],200,"loop").playAnimation("run");
+					var testactor=new BKGM.Actor().setBounds(0,0,150,150).addSprite(sprite);
 			        if(BKGM.FBConnect)
 			       	_fb = new BKGM.FBConnect();
 			       	_fb.init({appId:"296632137153437"});
@@ -36,13 +49,16 @@
 			        Game.random = function(min, max){
 			        	return Math.floor(min + Math.random()*(max-min));
 			        };
-    
+			        
+
+    				
 				    director.state("ready", [	
 				     	"background",
 				     	"setup",
 				     	"drop.tail",
 				     	"drop.update",
-				     	"drop.draw"
+				     	"drop.draw",
+				     	"testactor.draw"
 				    ]);
 				    
 				    director.state("menu", [
@@ -54,7 +70,8 @@
 				    	"drop.update",
 				    	"blocks.update",
 				    	"drop.draw",
-				    	"blocks.draw"
+				    	"blocks.draw",
+				    	"testactor.draw"
 				    //	"guide"
 				    ]);
 				        
@@ -74,7 +91,7 @@
 				    });
 				    
 				    director.task("drop.update", function(){
-				        Game.drop.updatePosition()
+				        Game.drop.updatePosition()				        
 				    });
 				    
 				    director.task("drop.draw", function(){
@@ -82,6 +99,9 @@
 				        Game.fill(255, 255, 255, 1)
 				        var tail = Game.drop.tail;
 				        Game.text(Game.score, tail[tail.length - 1], Game.drop.y + tail.length*Game.speed + 20, 30 * SCALE);
+				    });
+				    director.task("testactor.draw", function(){
+				        testactor._draw(Game);
 				    });
 
 				    director.task("blocks.update", function(){
