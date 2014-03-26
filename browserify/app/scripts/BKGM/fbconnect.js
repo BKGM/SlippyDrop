@@ -1,4 +1,4 @@
-(function(FBConnect){
+(function(){
     var Base64Binary = {
         _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
@@ -111,10 +111,10 @@
             }
         }
     };
-    BKGM.FBConnect = function(){        
+    var FBConnect = function(){        
         // return this;
     }
-    BKGM.FBConnect.prototype= {
+    FBConnect.prototype= {
         init:function(obj,callback){
             var self=this;
             var app_id="296632137153437";
@@ -203,5 +203,7 @@
 
         }
     };
+
+    module.exports = FBConnect;
    
 })();

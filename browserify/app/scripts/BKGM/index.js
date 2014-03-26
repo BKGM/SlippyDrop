@@ -67,8 +67,10 @@ var BKGM = BKGM||{};
         BKGM.SINGLE_TOUCH=0;
         BKGM.MULTI_TOUCH=1;
         BKGM.TYPE_TOUCH=BKGM.SINGLE_TOUCH;
+
+        _this.Codea = obj.Codea;
         
-        if(BKGM.DeviceMotion)
+        if(obj.DeviceMotion)
         if ((window.DeviceMotionEvent) || ('listenForDeviceMovement' in window)) {
             window.addEventListener('devicemotion', function(eventData){
                         if(eventData.accelerationIncludingGravity)
@@ -133,7 +135,7 @@ var BKGM = BKGM||{};
             this.canvas.setAttribute("id", "game");
             this.canvas.width  = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            document.appendChild(this.canvas);
+            document.body.appendChild(this.canvas);
         }       
         this.width=this.canvas.width;
         this.height=this.canvas.height;
@@ -274,8 +276,11 @@ var BKGM = BKGM||{};
             this._linemode=lineMode;
             return this;
         },
-        stroke:function(color, width){
-            this._strokeColor=color;
+        stroke:function(R, G, B, A){
+            this._strokeColor="rgba("+R+", "+G+", "+B+", " + A + ")";
+            return this;
+        },
+        strokeWidth: function(width){
             this._strokeWidth=width;
             return this;
         },
@@ -881,7 +886,7 @@ var BKGM = BKGM||{};
         }
 
     }
-     
-        
        
 })();
+
+module.exports = BKGM;
