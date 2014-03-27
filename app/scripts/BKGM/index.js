@@ -133,8 +133,9 @@ var BKGM = BKGM||{};
         else {
             this.canvas = document.createElement('canvas');
             this.canvas.setAttribute("id", "game");
-            this.canvas.width  = window.innerWidth;
             this.canvas.height = window.innerHeight;
+            this.canvas.width  = this.canvas.height*(2/3);
+            
             document.body.appendChild(this.canvas);
         }       
         this.width=this.canvas.width;
@@ -263,14 +264,18 @@ var BKGM = BKGM||{};
             return this;
         },
         line:function(x1, y1, x2, y2){
+
             this.ctx.beginPath();
+
             this.ctx.moveTo(x1, y1);
             this.ctx.lineTo(x2, y2);
             this.ctx.lineCap = this._linemode||'butt';
             if (this._strokeWidth) this.ctx.lineWidth = this._strokeWidth;
             if (this._strokeColor) this.ctx.strokeStyle = this._strokeColor;
+            // console.log(this._strokeColor)
             this.ctx.stroke();
             this.ctx.closePath();
+
             return this;
         },
         lineCapMode:function(lineMode){
@@ -278,7 +283,7 @@ var BKGM = BKGM||{};
             return this;
         },
         stroke:function(R, G, B, A){
-            this._strokeColor="rgba("+R+", "+G+", "+B+", " + A + ")";
+            this._strokeColor="rgba("+R+", "+G+", "+B+", " + (A/255) + ")";
             return this;
         },
         strokeWidth: function(width){

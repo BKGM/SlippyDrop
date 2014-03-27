@@ -82,11 +82,12 @@ drop.updateByTouch = function(){
     if (game.currentTouch.state === 'MOVING') {
         var tx = game.currentTouch.x,
             ty = game.currentTouch.y;
-
+        game.stroke(255, 255, 255, 61);   
         this.rotate = (tx - x) / 768;
         game.strokeWidth(4);
         game.line(x, y, tx, ty);
-        game.strokeWidth(0);
+        // if(game.stroke)
+        // game.strokeWidth(0);
         game.fill(255, 255, 255, 148);
         game.circle(tx, ty, 50);
     }

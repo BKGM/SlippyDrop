@@ -72,6 +72,7 @@ explosion.draw = function() {
     }
 
     this.opacity = 255 * (1 - (this.time/30));
+    
     game.lineCapMode('butt');
     game.strokeWidth(0);
 
