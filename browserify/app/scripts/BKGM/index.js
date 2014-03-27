@@ -229,7 +229,7 @@ var BKGM = BKGM||{};
         },
         fill:function(R, G, B, A){
             this.ctx.beginPath();
-            this.ctx.fillStyle="rgba("+R+", "+G+", "+B+", " + A + ")";
+            this.ctx.fillStyle="rgba("+R+", "+G+", "+B+", " + (A/255) + ")";
             // this.ctx.fill();
             return this;
         },
@@ -250,7 +250,7 @@ var BKGM = BKGM||{};
             this.ctx.translate(0, this.canvas.height);
             this.ctx.scale(1,-1);  
             this.ctx.textAlign='center';
-            this.ctx.font = fontSize+'px Times New Roman'||'40px Times New Roman';
+            this.ctx.font = fontSize+'px SourceSansPro'||'40px SourceSansPro';
             this.ctx.fillText(string, x, this.canvas.height-(y-fontSize/2));
             this.ctx.restore();
             return this;
@@ -258,7 +258,7 @@ var BKGM = BKGM||{};
         circle:function( x, y, diameter){
             this.ctx.beginPath();
             // this.ctx.drawImage(this._circle,0,0,this._circle.width,this._circle.width,x - diameter,y - diameter,diameter*2,diameter*2);
-            this.ctx.arc(x, y, diameter, 0, Math.PI*2,false);
+            this.ctx.arc(x, y, diameter/2, 0, Math.PI*2,false);
             this.ctx.fill(); 
             return this;
         },
@@ -370,6 +370,9 @@ var BKGM = BKGM||{};
         } 
         x -= _this.canvas.offsetLeft;
         y -= _this.canvas.offsetTop;
+        if(_this.Codea){
+            y=_this.HEIGHT-y;
+        }
         return {x:x,y:y,number:e.identifier}
     }
     
@@ -390,6 +393,8 @@ var BKGM = BKGM||{};
                     var touch = event.touches[0];
                     var e=checkMousePos(touch,_this);
                     _this.currentTouch.state="START";
+                    _this.currentTouch.x = e.x;
+                    _this.currentTouch.y = e.y;
                     if(_this.states && _this.states._touchStart) _this.states._touchStart(e); else
                     if(_this._touchStart) _this._touchStart(e);
                     break;
@@ -421,14 +426,18 @@ var BKGM = BKGM||{};
             var touchs=[];
             event.preventDefault();
             for (var i = 0; i < event.changedTouches.length; i++) {
-                var touch = event.changedTouches[i];
-                if(BKGM.TYPE_TOUCH==BKGM.SINGLE_TOUCH && touch.identifier==0) {                   
+                // var touch = event.changedTouches[i];
+                if(BKGM.TYPE_TOUCH==BKGM.SINGLE_TOUCH) { 
+                    var touch = event.changedTouches[i];
+                    var e=checkMousePos(touch,_this);                  
                     _this.currentTouch.state="MOVING";
-                    if(_this._touchDrag) _this._touchDrag(checkMousePos(touch,_this));
+                    _this.currentTouch.x = e.x;
+                    _this.currentTouch.y = e.y;
                     break;
                 }
                 var touch = event.changedTouches[i];
                 var e=checkMousePos(touch,_this);
+                
                 touchs.push(e);
                 
             }
@@ -452,6 +461,8 @@ var BKGM = BKGM||{};
                      var touch = event.changedTouches[0]; 
                     _this.currentTouch.state="ENDED";
                     var e=checkMousePos(touch,_this);
+                    _this.currentTouch.x = e.x;
+                    _this.currentTouch.y = e.y;
                     if(_this.states && _this.states.touchEnd) _this.states._touchEnd(e); else
                     if(_this._touchEnd) _this._touchEnd(e); 
                     break;

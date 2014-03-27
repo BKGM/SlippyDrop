@@ -1,4 +1,5 @@
 var game = require('./game');
+var screenset=require('./BKGM/screenset');
 var SCALE =game.WIDTH/768;
 var SQRT_SCALE = Math.sqrt(game.WIDTH/768);
 var CONST = {
@@ -15,7 +16,11 @@ var CONST = {
 	DROP_ACCEL 			: Math.floor(2 * SCALE + 0.5),
 	DROP_GRAV			: game.WIDTH,
 	DROP_Y 				: Math.floor(game.HEIGHT/2),
-	SPEED 				: Math.floor(3 * SCALE),
+	SPEED 				: screenset(game,{
+							'IPAD':3,
+							'IPHONE':2,
+							'DEFAULT':Math.floor(4*SQRT_SCALE)
+						})
 };
 
 module.exports = CONST;

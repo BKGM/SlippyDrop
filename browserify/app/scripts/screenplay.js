@@ -5,6 +5,7 @@ var director = require('./BKGM/director'),
     SCALE = constants.SCALE,
     SQRT_SCALE = constants.SQRT_SCALE,
     drop = require('./drop'),
+    DROP_Y = constants.DROP_Y,
     WIDTH = game.WIDTH,
     HEIGHT = game.HEIGHT;
 
@@ -48,10 +49,9 @@ module.exports = function(){
         'guide',
         {
             name: 'buttons',
-            args: function(){
-                return [{ 
+            args: [{ 
                     x : WIDTH/2,
-                    y : drop.y - 140,
+                    y : DROP_Y - 140,
                     w : 300 * SQRT_SCALE,
                     h : 50 * SQRT_SCALE,
                     s : 15 * SQRT_SCALE,
@@ -64,8 +64,7 @@ module.exports = function(){
                         "game",
                         "gamegrav"
                     ]
-                }];
-            }
+            }]
         }
     ]);
         
@@ -88,24 +87,22 @@ module.exports = function(){
         'guide',
         {
             name: 'buttons',
-            args: function(){
-                return [{ 
-                    x : WIDTH/2,
-                    y : drop.y - 140,
-                    w : 300 * SQRT_SCALE,
-                    h : 50 * SQRT_SCALE,
-                    s : 15 * SQRT_SCALE,
-                    f : 30 * SQRT_SCALE,
-                    list : [
-                        "Touch and drag",
-                        "Tilt your device"
-                    ],
-                    actions : [
-                        "game",
-                        "gamegrav"
-                    ]
-                }];
-            }
+            args: [{ 
+                x : WIDTH/2,
+                y : DROP_Y - 140,
+                w : 300 * SQRT_SCALE,
+                h : 50 * SQRT_SCALE,
+                s : 15 * SQRT_SCALE,
+                f : 30 * SQRT_SCALE,
+                list : [
+                    "Touch and drag",
+                    "Tilt your device"
+                ],
+                actions : [
+                    "game",
+                    "gamegrav"
+                ]
+            }]
         }
     ]);
 };

@@ -39,10 +39,7 @@ module.exports = function(){
             if (v.y > HEIGHT + v.r || v.x > WIDTH + v.r || v.x < -v.r) {
                 background_c.slice(i, 1);
             } else {
-                if(!this.aaa){
-                    this.aaa=1;
-                    console.log(v)
-                }
+                
                 game.circle(v.x, v.y, v.r);
             }
         }
@@ -53,17 +50,17 @@ module.exports = function(){
     director.task('logo', function(logo_x, logo_y){
 
         var c = random(0, 30);
-        var f = 25 * SCALE;
+        var f = 25;
                 
-        game.fill(255-c, 255-c, 255-c, 1);
+        game.fill(255-c, 255-c, 255-c, 255);
         
         var d = random(-1, 1);
         var e = random(-1, 1);
         
-        game.text('BKgameMaker', logo_x + d, logo_y + f + e, 20 * SCALE);
+        game.text('BKgameMaker', logo_x + d, logo_y + f + e, 20);
         
-        game.text('SLIPPY DROP', logo_x + d, logo_y - f + e, 50 * SCALE);
-        game.fill(255-c, 255-c, 255-c, 1);
+        game.text('WHITE DROP', logo_x + d, logo_y - f + e, 50);
+        game.fill(255-c, 255-c, 255-c, 255);
     }, true);
     
     director.task("buttons", function(buttons) {
@@ -82,19 +79,19 @@ module.exports = function(){
         
         for (var i = 0, l = list.length; i < l; i++) {
             game.fill(240, 240, 240, 180);
-            game.rect(x + d, y - ( h + s ) * (i-1) + e, w, h);
+            game.rect(x + d, y - ( h + s ) * i + e, w, h);
             game.fill(0, 0, 0, 220);
-            game.text(list[i], x + d, y - ( h + s ) * (i-1) + e, f);
+            game.text(list[i], x + d, y - ( h + s ) * i + e, f);
         }
         
-        if (game.currentTouch.state == 'BEGAN') {
+        if (game.currentTouch.state === 'MOVING') {
         	var tx = game.currentTouch.x,
         		ty = game.currentTouch.y;
             if (tx > x - w/2 && tx < x + w/2) {
-                var i = 1,
+                var i = 0,
                 	actions = buttons.actions;
-                while (con && i <= actions.length) {
-                    if (ty > y - h * (i-1) - h / 2 && ty < y - h * (i-1) + h / 2) {
+                while (i <= actions.length) {
+                    if (ty > y - h * i - h / 2 && ty < y - h * i + h / 2) {
                         director.switch(actions[i]);
                         break;
                     }

@@ -12,7 +12,7 @@ var blockHeight   = constants.BLOCK_HEIGHT,
     blockGap      = constants.BLOCK_GAP,
     maxLeftWidth  = WIDTH - blockGap,
     maxY          = HEIGHT + blockHeight / 2,
-    blockDistance = screenset({
+    blockDistance = screenset(game,{
         'IPAD': 210,
         'IPHONE': 100,
         'DEFAULT': Math.floor(210 * SCALE)
@@ -76,3 +76,4 @@ explosion.draw = function() {
     game.strokeWidth(0);
 
 }
+module.exports = explosion;

@@ -1,22 +1,20 @@
-_ = require('lodash');
-
 var set = {
 	'IPAD'    : 768,
-	'IPHONE'  : 320,
-	'DEFAULT' : 320
+	'IPHONE'  : 320
 };
 
 var screenset = function(game, opt){
 	for (var width in opt) {
+		
 		if (set[width] === game.WIDTH) {
 			var result = opt[width];
-			if ( _.isFunction(result) ) {
+			if ( typeof result === "function" ) {
 				return result();
 			} else return result;
 			break;
-		}
-		return screenset.DEFAULT;
+		}		
 	}
+	return opt['DEFAULT'];
 }
 
 module.exports = screenset;

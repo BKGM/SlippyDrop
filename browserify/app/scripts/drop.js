@@ -1,6 +1,7 @@
 var game = require('./game'),
     constants = require('./constants'),
     screenset = require('./BKGM/screenset'),
+    blocks = require('./blocks'),
     SCALE = constants.SCALE,
     SQRT_SCALE = constants.SQRT_SCALE,
     WIDTH = game.WIDTH,
@@ -17,13 +18,15 @@ var diameter      = constants.DROP_DIAMETER,
     y             = constants.DROP_Y,
     top           = y + radius,
     bot           = y - radius,
-    maxTailLength = screenset({
+    maxTailLength = screenset(game, {
         'IPAD': 20,
         'IPHONE': 15,
         'DEFAULT': Math.floor(20 * SQRT_SCALE)
     });
 
-var drop = {};
+var drop = {
+    collideBearablePrecaled : {}
+};
 
 drop.reset = function(){
     this.top      = top;
@@ -32,8 +35,6 @@ drop.reset = function(){
     this.velx     = 0;
     this.tail     = [ WIDTH/2 ];
     this.rotate   = 0;
-    this.collideBearablePrecaled = {};
-    drop.collideBearablePrecal();
 };
 
 drop.collideBearable = function(btop, bbot){
@@ -51,15 +52,16 @@ drop.collideBearablePrecal = function(){
 };
 
 drop.reset();
+drop.collideBearablePrecal();
 
 game.stroke(255, 255, 255, 61);
 
-var tail = drop.tail,
-    collideBearablePrecaled = drop.collideBearablePrecaled;
+var collideBearablePrecaled = drop.collideBearablePrecaled;
 
 drop.updateTail = function(){
-    tail.unshift(this.x);
-    if (tail.length === maxTailLength) tail.pop();
+    this.tail.unshift(this.x);
+    if (this.tail.length >= maxTailLength) this.tail.pop();
+    
 }
 
 drop.updatePosition = function(){
@@ -77,10 +79,10 @@ drop.updatePosition = function(){
 
 drop.updateByTouch = function(){
     var x = this.x;
-
     if (game.currentTouch.state === 'MOVING') {
         var tx = game.currentTouch.x,
             ty = game.currentTouch.y;
+
         this.rotate = (tx - x) / 768;
         game.strokeWidth(4);
         game.line(x, y, tx, ty);
@@ -101,8 +103,9 @@ drop.updateByTouch = function(){
     }
 };
 
-drop.collide = function(block){
-    var btop = block.y + blockHeight,
+drop.collide = function(){
+    var block = blocks.now(),
+        btop = block.y + blockHeight,
         bbot = block.y,
         x    = this.x;
     if (btop >= bot && bbot <= top) {
@@ -113,17 +116,18 @@ drop.collide = function(block){
 
 drop.draw = function(){
     game.fill(255, 255, 255, 255);
+    
+    // Draw head
+    game.circle(x, y, diameter);
 
-    // Draw tail
-    for (var i = 0, l = tail.length; i < l; i++) {
-        game.circle(tail[i], y + i * speed, diameter - diameter*i/l);
+    // Draw this.tail
+    for (var i = 0, l = this.tail.length; i < l; i++) {
+        game.circle(this.tail[i], y + i * speed, diameter - diameter*i/l);
     }
 
     var x = this.x;
 
-    // Draw head
-    game.circle(x, y, diameter);
-
+    
     // Draw eyes
     game.fill(0, 0, 0, 255);
     game.circle(x - diameter/6 - 1, y-1, diameter/3);

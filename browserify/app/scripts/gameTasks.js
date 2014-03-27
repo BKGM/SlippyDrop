@@ -9,6 +9,7 @@ var director = require('./BKGM/director'),
     speed = constants.SPEED,
     blocks = require('./blocks'),
     drop = require('./drop'),
+    DROP_Y = constants.DROP_Y,
     explosion = require('./explosion');
 
 module.exports = function(){
@@ -26,6 +27,7 @@ module.exports = function(){
 
     director.task("score", function() {
         if (blocks.pass(drop)){
+            console.log("pass")
             //sound(SOUND_PICKUP, 32947)
             score++;
         }
@@ -64,13 +66,13 @@ module.exports = function(){
 
     director.task("guide", function() {
         game.fill(255, 255, 255, 255);
-        game.text("Choose your preferred method", WIDTH/2, drop.y - 80, 16);
-        game.text("to control the white drop", WIDTH/2, drop.y - 100, 16);
+        game.text("Choose your preferred method", WIDTH/2, DROP_Y - 80, 16);
+        game.text("to control the white drop", WIDTH/2, DROP_Y - 100, 16);
     });
 
     director.taskOnce("createExplosion", function() {
         //sound(DATA, "ZgNACgBAK0RBGRII9Y/tPt6vyD6gjBA+KwB4b3pAQylFXB0C")
-        explosion.reset(drop.x, drop.y);
+        explosion.reset(drop.x, DROP_Y);
     });
     
     director.task("explosion", function() {
@@ -85,12 +87,19 @@ module.exports = function(){
         game.rect(0, 0, WIDTH, HEIGHT);
         
         game.fill(255, 255, 255, 255);
-        game.fontSize(24);
+        // game.fontSize(24);
 
         if (score <= highscore) {
-            game.text("SCORE: "+score+"  -  BEST: "+highscore, WIDTH/2, HEIGHT/2 - 40)
+            game.text("SCORE: "+score+"  -  BEST: "+highscore, WIDTH/2, HEIGHT/2 - 40,24)
         } else {
-            game.text("NEW BEST SCORE: "+score, WIDTH/2, HEIGHT/2 - 40)
+            game.text("NEW BEST SCORE: "+score, WIDTH/2, HEIGHT/2 - 40,24)
         }
+    });
+
+    director.task('displayScore', function(){
+        game.fill(255,255,255,255);
+        var tail = drop.tail;
+        game.text(score+"",tail[tail.length-1],DROP_Y + tail.length*speed/ SCALE + 15 * SCALE,30);
+
     });
 };
