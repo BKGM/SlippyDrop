@@ -46,7 +46,7 @@ drop.collideBearable = function(btop, bbot){
 
 drop.collideBearablePrecal = function(){
     for (var i = y - radius - blockHeight - 5, l = y + radius + 5; i < l; i++) {
-        collideBearablePrecaled[i] = this.collideBearable(i, i + blockHeight);
+        this.collideBearablePrecaled[i] = this.collideBearable(i, i + blockHeight);
     }
 };
 

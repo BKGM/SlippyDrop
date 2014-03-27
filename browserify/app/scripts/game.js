@@ -1,5 +1,5 @@
 var BKGM = require('./BKGM'),
-	director = require('./BKGM/director')
+	director = require('./BKGM/director'),
 	game = new BKGM({
     	DeviceMotion: true,
     	Codea		: true,

@@ -18,9 +18,10 @@ module.exports = function(){
 	director.task('background', function(){
         var c = random(0, 30);
         game.background(c, c, c, 255);
-
+        
         if (c < 3 && background_c.length < 30) {
             var ra = random(0, WIDTH/8);
+            
             background_c.push({
             	r: ra,
             	x: random(ra, WIDTH - ra),
@@ -38,9 +39,15 @@ module.exports = function(){
             if (v.y > HEIGHT + v.r || v.x > WIDTH + v.r || v.x < -v.r) {
                 background_c.slice(i, 1);
             } else {
+                if(!this.aaa){
+                    this.aaa=1;
+                    console.log(v)
+                }
                 game.circle(v.x, v.y, v.r);
             }
         }
+        // game.background(100, 100, 100, 255);
+
     }, true);
     
     director.task('logo', function(logo_x, logo_y){
