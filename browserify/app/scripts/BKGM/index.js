@@ -378,9 +378,10 @@ var BKGM = BKGM||{};
     
     var addMouseTouchEvent= function(_this){
         
-        _this.currentTouch={ state:"ENDED" };
+        _this.currentTouch={ state:"ENDED" ,isTouch:false};
         _this.canvas.addEventListener('touchstart', function(event) {
             var touchs=[];
+            event.preventDefault();
             if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH)
                 if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
                 event.targetTouches > 1) {
@@ -393,6 +394,7 @@ var BKGM = BKGM||{};
                     var touch = event.touches[0];
                     var e=checkMousePos(touch,_this);
                     _this.currentTouch.state="START";
+                    _this.currentTouch.isTouch=true;
                     _this.currentTouch.x = e.x;
                     _this.currentTouch.y = e.y;
                     if(_this.states && _this.states._touchStart) _this.states._touchStart(e); else
@@ -448,6 +450,7 @@ var BKGM = BKGM||{};
         }, false);
         _this.canvas.addEventListener('touchend', function(event) {
             var touchs=[];
+            event.preventDefault();
             if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH)
                 if ((!window.navigator.msPointerEnabled && event.touches.length > 0) ||
                 event.targetTouches > 0) {
@@ -460,6 +463,7 @@ var BKGM = BKGM||{};
                     // console.log(touch)  
                      var touch = event.changedTouches[0]; 
                     _this.currentTouch.state="ENDED";
+                    _this.currentTouch.isTouch=false;
                     var e=checkMousePos(touch,_this);
                     _this.currentTouch.x = e.x;
                     _this.currentTouch.y = e.y;
@@ -486,6 +490,9 @@ var BKGM = BKGM||{};
             var e=checkMousePos(event,_this);
             _this._ismouseDown=true;
             _this.currentTouch.state="START";
+            _this.currentTouch.isTouch=true;
+            _this.currentTouch.x = e.x;
+            _this.currentTouch.y = e.y;
             // for (var i = _this.childrentList.length - 1; i >= 0; i--) {
             //     if(_this.childrentList[i]._eventenable &&checkEventActor( e,_this.childrentList[i])) {
             //         _this.childrentList[i].mouseDown(e)
@@ -496,9 +503,13 @@ var BKGM = BKGM||{};
                     if(_this._mouseDown) _this._mouseDown(e);
         }, false);
         _this.canvas.addEventListener('mousemove', function(event) {
-            var e=checkMousePos(event,_this);
-            if(_this._ismouseDown) _this.currentTouch.state="MOVING";
-            if(this._ismouseDown){
+            
+
+            if(_this._ismouseDown){
+                var e=checkMousePos(event,_this);
+                _this.currentTouch.state="MOVING";
+                _this.currentTouch.x = e.x;
+                _this.currentTouch.y = e.y;
                 if(_this.states && _this.states._mouseDrag) _this.states._mouseDrag(e); else
                     if(_this._mouseDrag) _this._mouseDrag(e);
             }
@@ -507,7 +518,10 @@ var BKGM = BKGM||{};
         _this.canvas.addEventListener('mouseup', function(event) {
             var e=checkMousePos(event,_this);
             _this._ismouseDown=false;
+            _this.currentTouch.x = e.x;
+            _this.currentTouch.y = e.y;
             _this.currentTouch.state="ENDED";
+            _this.currentTouch.isTouch=false;
             // for (var i = _this.childrentList.length - 1; i >= 0; i--) {
             //     if(_this.childrentList[i]._eventenable &&checkEventActor( e,_this.childrentList[i])) {
             //         _this.childrentList[i].mouseUp(e)

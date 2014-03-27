@@ -84,7 +84,7 @@ module.exports = function(){
             game.text(list[i], x + d, y - ( h + s ) * i + e, f);
         }
         
-        if (game.currentTouch.state === 'MOVING') {
+        if (game.currentTouch.isTouch) {
         	var tx = game.currentTouch.x,
         		ty = game.currentTouch.y;
             if (tx > x - w/2 && tx < x + w/2) {
