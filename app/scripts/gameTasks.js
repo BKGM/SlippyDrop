@@ -57,7 +57,14 @@ module.exports = function(){
                         actions = buttons.actions;
                     while (i <= actions.length) {
                         if (ty > y - h * i - h / 2 && ty < y - h * i + h / 2) {
-                            director.switch(actions[i]);
+                            switch(actions[i]){
+                                case 'game':
+                                    director.switch('game');
+                                break;
+                                case 'share':
+                                    // CODE HERE
+                                break;
+                            };
                             break;
                         }
                         i++;
@@ -171,9 +178,5 @@ module.exports = function(){
         var tail = drop.tail;
         game.text(score+"",tail[tail.length-1],DROP_Y + tail.length*speed/ SCALE + 15 * SCALE,30);
 
-    });
-
-    director.task('share', function(){
-        director.switch('gameover');
     });
 };

@@ -87,8 +87,4 @@ module.exports = function(){
             }]
         }
     ]);
-
-    director.state('share', [
-        'share'
-    ]);
 };
