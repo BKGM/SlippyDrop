@@ -66,6 +66,29 @@ module.exports = function(){
             name: 'logo',
             args: [WIDTH/2, HEIGHT/2 + 50],
         },
-        'guide'
+        'guide',
+        {
+            name: "buttons",
+            args: [{
+                x : WIDTH/2,
+                y : DROP_Y - 140,
+                w : 300 * SQRT_SCALE,
+                h : 50 * SQRT_SCALE,
+                s : 15 * SQRT_SCALE,
+                f : 30 * SQRT_SCALE,
+                list : [
+                    "Try again",
+                    "Share your score"
+                ],
+                actions : [
+                    "game",
+                    "share"
+                ]
+            }]
+        }
+    ]);
+
+    director.state('share', [
+        'share'
     ]);
 };

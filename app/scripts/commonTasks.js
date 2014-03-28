@@ -69,7 +69,7 @@ module.exports = function(){
         	w 		= buttons.w,
         	h 		= buttons.h,
         	s 		= buttons.s,
-        	f 		= buttons.f,
+        	f 		= 20,//buttons.f,
         	list	= buttons.list;
         
         game.rectMode('CENTER');
@@ -81,23 +81,8 @@ module.exports = function(){
             game.fill(240, 240, 240, 180);
             game.rect(x + d, y - ( h + s ) * i + e, w, h);
             game.fill(0, 0, 0, 220);
-            game.text(list[i], x + d, y - ( h + s ) * i + e, f);
+            game.text(list[i], x + d, y - ( h + s ) * i + e + 4, f);
         }
         
-        if (game.currentTouch.isTouch) {
-        	var tx = game.currentTouch.x,
-        		ty = game.currentTouch.y;
-            if (tx > x - w/2 && tx < x + w/2) {
-                var i = 0,
-                	actions = buttons.actions;
-                while (i <= actions.length) {
-                    if (ty > y - h * i - h / 2 && ty < y - h * i + h / 2) {
-                        director.switch(actions[i]);
-                        break;
-                    }
-                    i++;
-                }
-            }
-        }
     }, true);
 };

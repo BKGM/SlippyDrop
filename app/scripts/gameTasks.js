@@ -23,17 +23,55 @@ module.exports = function(){
         _fb.init({appId:"296632137153437"});
         _fb.initLeaderboards(game,null,game.WIDTH,0,760-game.WIDTH,game.HEIGHT,true);
         _fb.login(_fb.showLeaderboard);
-    var _startgame=function(){
+
+    var buttons = {
+        x : WIDTH/2,
+        y : DROP_Y - 140,
+        w : 300 * SQRT_SCALE,
+        h : 50 * SQRT_SCALE,
+        s : 15 * SQRT_SCALE,
+        f : 30 * SQRT_SCALE,
+        list : [
+            "Try again",
+            "Share your score"
+        ],
+        actions : [
+            "game",
+            "share"
+        ]
+    };
+    var _startgame=function(e){
         switch(director.current){
-            case 'gameover':director.switch("game");break;
+            case 'gameover':
+                var x    = buttons.x,
+                    y    = buttons.y,
+                    w    = buttons.w,
+                    h    = buttons.h,
+                    s    = buttons.s,
+                    f    = buttons.f,
+                    list = buttons.list;
+                var tx = e.x,
+                    ty = e.y;
+                if (tx > x - w/2 && tx < x + w/2) {
+                    var i = 0,
+                        actions = buttons.actions;
+                    while (i <= actions.length) {
+                        if (ty > y - h * i - h / 2 && ty < y - h * i + h / 2) {
+                            director.switch(actions[i]);
+                            break;
+                        }
+                        i++;
+                    }
+                }
+            break;
             case 'menu':director.switch("game");break;
         }
     }
-    game.mouseDown=function(){
-        _startgame();
+    game.mouseDown=function(e){
+        _startgame(e);
     }
-    game.touchStart=function(){
-        _startgame();
+    game.touchStart=function(e){
+        _startgame(e);
     }
 	director.taskOnce("setup", function(){
 		highscore = localscore.getScore().score||0;
@@ -133,5 +171,9 @@ module.exports = function(){
         var tail = drop.tail;
         game.text(score+"",tail[tail.length-1],DROP_Y + tail.length*speed/ SCALE + 15 * SCALE,30);
 
+    });
+
+    director.task('share', function(){
+        director.switch('gameover');
     });
 };
