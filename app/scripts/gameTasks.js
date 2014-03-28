@@ -62,7 +62,7 @@ module.exports = function(){
                                     director.switch('game');
                                 break;
                                 case 'share':
-                                    // CODE HERE
+                                    _fb.postCanvas();
                                 break;
                             };
                             break;
