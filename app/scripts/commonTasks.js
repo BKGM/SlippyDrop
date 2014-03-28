@@ -32,12 +32,12 @@ module.exports = function(){
 
         game.fill(255-c, 255-c, 255-c, 80);
         var incx = drop.rotate * 20;
-        for (var i = 0, l = background_c.length; i < l; i++){
+        for (var i = background_c.length - 1; i >=0; i--){
         	var v = background_c[i];
             v.x = v.x + incx;
             v.y = v.y + v.s + 1;
             if (v.y > HEIGHT + v.r || v.x > WIDTH + v.r || v.x < -v.r) {
-                background_c.slice(i, 1);
+                background_c.splice(i, 1);
             } else {
                 
                 game.circle(v.x, v.y, v.r);
