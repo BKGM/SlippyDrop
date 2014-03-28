@@ -1,4 +1,6 @@
 var director = require('./BKGM/director'),
+    BKGM = require('./BKGM'),
+    _fb =   require('./BKGM/fbconnect'),
 	game = require('./game'),
 	constants = require('./constants'),
     random = require('./random'),
@@ -15,19 +17,35 @@ var director = require('./BKGM/director'),
 module.exports = function(){
 
 	var score = 0,
-		highscore = 0;
-
+		highscore = 0,
+        newbestscore=false;
+    var localscore=new BKGM.ScoreLocal("whitedrop");
+        _fb.init({appId:"296632137153437"});
+        _fb.initLeaderboards(game,null,game.WIDTH,0,760-game.WIDTH,game.HEIGHT,true);
+        _fb.login(_fb.showLeaderboard);
+    var _startgame=function(){
+        switch(director.current){
+            case 'gameover':director.switch("game");break;
+            case 'menu':director.switch("game");break;
+        }
+    }
+    game.mouseDown=function(){
+        _startgame();
+    }
+    game.touchStart=function(){
+        _startgame();
+    }
 	director.taskOnce("setup", function(){
-		highscore = 0;
+		highscore = localscore.getScore().score||0;
         drop.reset();
         blocks.reset();
         blocks.spawn(0);
         score = 0;
+        newbestscore=false;
     });
 
     director.task("score", function() {
         if (blocks.pass(drop)){
-            console.log("pass")
             //sound(SOUND_PICKUP, 32947)
             score++;
         }
@@ -56,6 +74,18 @@ module.exports = function(){
         }
     });
 
+    director.taskOnce("calscore", function(){
+        if(highscore<score){
+
+            localscore.submitScore(score);            
+            highscore=score;
+            newbestscore=true;
+        }
+        _fb.submitScore(score,null,function(){
+            _fb.showLeaderboard();
+        });
+    });
+
     director.task("blocks.update", function(){
     	blocks.update();
     });
@@ -66,8 +96,10 @@ module.exports = function(){
 
     director.task("guide", function() {
         game.fill(255, 255, 255, 255);
-        game.text("Choose your preferred method", WIDTH/2, DROP_Y - 80, 16);
-        game.text("to control the white drop", WIDTH/2, DROP_Y - 100, 16);
+        game.text("Click to start", WIDTH/2, DROP_Y - 80, 16);
+        //game.text("to control the white drop", WIDTH/2, DROP_Y - 100, 16);
+           
+        
     });
 
     director.taskOnce("createExplosion", function() {
@@ -89,7 +121,7 @@ module.exports = function(){
         game.fill(255, 255, 255, 255);
         // game.fontSize(24);
 
-        if (score <= highscore) {
+        if (!newbestscore) {
             game.text("SCORE: "+score+"  -  BEST: "+highscore, WIDTH/2, HEIGHT/2 - 40,24)
         } else {
             game.text("NEW BEST SCORE: "+score, WIDTH/2, HEIGHT/2 - 40,24)

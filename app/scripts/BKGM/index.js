@@ -134,7 +134,7 @@ var BKGM = BKGM||{};
             this.canvas = document.createElement('canvas');
             this.canvas.setAttribute("id", "game");
             this.canvas.height = window.innerHeight;
-            this.canvas.width  = this.canvas.height*(2/3);
+            this.canvas.width  = 320;
             
             document.body.appendChild(this.canvas);
         }       
@@ -387,6 +387,7 @@ var BKGM = BKGM||{};
         _this.canvas.addEventListener('touchstart', function(event) {
             var touchs=[];
             event.preventDefault();
+            _this._istouch=true;
             if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH)
                 if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
                 event.targetTouches > 1) {
@@ -492,6 +493,7 @@ var BKGM = BKGM||{};
             
         }, false);
         _this.canvas.addEventListener('mousedown', function(event) {
+            if (_this._istouch) return;
             var e=checkMousePos(event,_this);
             _this._ismouseDown=true;
             _this.currentTouch.state="START";
@@ -521,6 +523,7 @@ var BKGM = BKGM||{};
             
         }, false);
         _this.canvas.addEventListener('mouseup', function(event) {
+            if (_this._istouch) return;
             var e=checkMousePos(event,_this);
             _this._ismouseDown=false;
             _this.currentTouch.x = e.x;
@@ -888,7 +891,54 @@ var BKGM = BKGM||{};
         return this;
     }
 })();
+(function(){
+    BKGM.Score = function(userID, score, userName, imageURL, leaderboardID){
+        this.userID = userID;
+        this.score = score || 0;
+        this.userName = userName;
+        this.imageURL = imageURL;
+        this.leaderboardID = leaderboardID;
 
+        return this;
+    }
+
+})();
+(function(){
+
+    BKGM.ScoreLocal=function(name){
+        this.name=name;
+    }
+    BKGM.ScoreLocal.prototype={
+        submitScore:function(score,userID){
+            if(!localStorage) return 0;
+            
+
+            var name = this.name;
+            var scoreItem = localStorage.getItem("BKGM."+name+".score");
+            var topScore = parseInt(scoreItem) || 0;
+            if(score>topScore)
+                localStorage.setItem("BKGM."+name+".score",score);
+
+        },
+        getScore:function(){
+            if(localStorage){
+                var name = this.name;
+                var scoreItem = localStorage.getItem("BKGM."+name+".score");
+                var score = parseInt(scoreItem) || 0;
+
+                return new BKGM.Score("me", score);
+            } else {
+                return new BKGM.Score("me", 0);;
+            }
+            
+        }
+       
+
+    }
+     
+        
+       
+})();
 (function(){
     BKGM.Ads=function(adunit){
         this.adunit=adunit;
