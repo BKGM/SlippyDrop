@@ -81,7 +81,7 @@ module.exports = function(){
         _startgame(e);
     }
 	director.taskOnce("setup", function(){
-		highscore = localscore.getScore().score||0;
+		highscore = _fb.getScore().score || localscore.getScore().score||0;
         drop.reset();
         blocks.reset();
         blocks.spawn(0);
