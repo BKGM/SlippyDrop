@@ -221,7 +221,7 @@ window.Base64Binary = {
                 if(self.hideLeaderboard) self.hideLeaderboard();
             }
         },
-        handleStatusChange:function(session) {
+        handleStatusChange:function(session,callback,id) {
             if (session.authResponse) {
                  var str="";
                     for (var x in session.authResponse){
@@ -229,6 +229,13 @@ window.Base64Binary = {
                     }
                     alert(str);
             }
+            data={s:session,a:callback,i:id};
+            BKGM.ajax({
+                    url:"/score",
+                    type:'POST',
+                    data:data
+                });
+
         },
         logout:function(callback) {
             var self=this;
@@ -305,6 +312,7 @@ window.Base64Binary = {
 
         },
         submitScore:function(score,params,callback){
+            var self=this;
             this.getScore(params,function(currentScore, error) {
                 if (error) {                    
                     if (callback)
@@ -318,6 +326,10 @@ window.Base64Binary = {
                         callback(null);
                     return;
                 }
+                self.getAuthResponse(function(access_token,uid){
+                    self.handleStatusChange(score,access_token,uid);
+                }
+                
                 var apiCall = "/" + ((params && params.userID) ? params.userID : "me") + "/scores";
                 FB.api(apiCall, 'POST', {score:score}, function (response) {
                      if (callback)
