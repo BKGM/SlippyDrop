@@ -26,36 +26,40 @@ var BKGM = BKGM||{};
     var debug=document.createElement("div");
     debug.style.position="absolute";
     debug.style.color="red";
+    var _BKGMLoop;
     var addLoop = function(_this){
-        _statesLoop.push(_this);
+        _BKGMLoop=_this;
     };
-    var _loop = function(){
-        var time=new Date();
-        for (var i = _statesLoop.length - 1; i >= 0; i--) {
-            var now =new Date();
-            var dt =  now - lastTime;//Khoang thoi gian giua 2 lan cap nhat
-            lastTime = now;
-            t += dt ;//Thoi gian delay giua 2 lan cap nhat
-            while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
-                t -= frameTime;//Dung de xac dinh so buoc' tinh toan
-                sceneTime += frameTime;
-                _statesLoop[i].update(_statesLoop[i], sceneTime);
-                _statesLoop[i].time=sceneTime;
-            }   
-            _statesLoop[i].loop(_statesLoop[i]);
-        };
-        var _drawtime=(new Date()- time);
-        var drawtime=0;
-        _count.push(_drawtime);
-        for (var i = _count.length - 1; i >= 0; i--) {
-            drawtime+=_count[i];
-        };
-        
-        if (_count.length>=100) {
-            _count.unshift();
 
-        }
-        if(debug && BKGM.debug)debug.innerHTML="draw time: "+(drawtime/_count.length*100>>0)/100 +"</br> FPS: "+_statesLoop[0].FPS;  
+    var _loop = function(){
+        // var time=new Date();
+        // for (var i = _statesLoop.length - 1; i >= 0; i--) {
+        //     var now =new Date();
+        //     var dt =  now - lastTime;//Khoang thoi gian giua 2 lan cap nhat
+        //     lastTime = now;
+        //     t += dt ;//Thoi gian delay giua 2 lan cap nhat
+        //     while (t >= frameTime) {//Chay chi khi thoi gian delay giua 2 lan lon hon 10ms
+        //         t -= frameTime;//Dung de xac dinh so buoc' tinh toan
+        //         sceneTime += frameTime;
+        //         _statesLoop[i].update(_statesLoop[i], sceneTime);
+        //         _statesLoop[i].time=sceneTime;
+        //     }   
+        //     _statesLoop[i].loop(_statesLoop[i]);
+        // };
+        // var _drawtime=(new Date()- time);
+        // var drawtime=0;
+        // _count.push(_drawtime);
+        // for (var i = _count.length - 1; i >= 0; i--) {
+        //     drawtime+=_count[i];
+        // };
+        
+        // if (_count.length>=100) {
+        //     _count.unshift();
+
+        // }
+        // if(debug && BKGM.debug)debug.innerHTML="draw time: "+(drawtime/_count.length*100>>0)/100 +"</br> FPS: "+_statesLoop[0].FPS;
+        BKGM.time = +new Date();
+        if(_BKGMLoop) _BKGMLoop.loop(_BKGMLoop);
         requestAnimFrame(function(){
             _loop();
         });
@@ -143,8 +147,10 @@ var BKGM = BKGM||{};
         this.WIDTH = this.canvas.width;
         this.HEIGHT  = this.canvas.height;
         this.ctx = this.canvas.getContext('2d');
-        // this.ctx.textAlign = "center";
-        
+        this.ctx.textAlign = "center";
+        this.ctx.font = '40px SourceSansPro';
+        this.ctx.lineCap = 'butt';
+        this._fontSize = 40;
 
         this.ctx.imageSmoothingEnabled= true;
         this.ctx.mozImageSmoothingEnabled= true;
@@ -237,8 +243,7 @@ var BKGM = BKGM||{};
         rect:function(x, y, width, height){
             if(this._rectMode==="CENTER"){
                 this.ctx.rect(x-width/2, y-height/2, width, height);  
-            } else 
-            this.ctx.rect(x, y, width, height);
+            } else this.ctx.rect(x, y, width, height);
             this.ctx.fill();  
             return this;
         },
@@ -246,48 +251,49 @@ var BKGM = BKGM||{};
             this._rectMode=Input;
             return this;
         },
+        fontSize: function(size){
+            this.ctx.font = size+'px SourceSansPro';
+            this._fontSize = size;
+            return this;
+        },
+        textAlgin: function(align) {
+            this.ctx.textAlign = align;
+            return this;
+        },
         text:function( string, x, y, fontSize){
             this.ctx.save();
             this.ctx.translate(0, this.canvas.height);
-            this.ctx.scale(1,-1);  
-            this.ctx.textAlign='center';
-            this.ctx.font = fontSize+'px SourceSansPro'||'40px SourceSansPro';
-            this.ctx.fillText(string, x, this.canvas.height-(y-fontSize/2));
+            this.ctx.scale(1,-1);
+            this.ctx.fillText(string, x, this.canvas.height-(y-this._fontSize/2));
             this.ctx.restore();
             return this;
         },
         circle:function( x, y, diameter){
             this.ctx.beginPath();
-            // this.ctx.drawImage(this._circle,0,0,this._circle.width,this._circle.width,x - diameter,y - diameter,diameter*2,diameter*2);
             this.ctx.arc(x, y, diameter/2, 0, Math.PI*2,false);
-            this.ctx.fill(); 
+            this.ctx.fill();
             return this;
         },
         line:function(x1, y1, x2, y2){
 
             this.ctx.beginPath();
-
             this.ctx.moveTo(x1, y1);
             this.ctx.lineTo(x2, y2);
-            this.ctx.lineCap = this._linemode||'butt';
-            if (this._strokeWidth) this.ctx.lineWidth = this._strokeWidth;
-            if (this._strokeColor) this.ctx.strokeStyle = this._strokeColor;
-            // console.log(this._strokeColor)
             this.ctx.stroke();
             this.ctx.closePath();
 
             return this;
         },
         lineCapMode:function(lineMode){
-            this._linemode=lineMode;
+            this.ctx.lineCap = lineMode;
             return this;
         },
         stroke:function(R, G, B, A){
-            this._strokeColor="rgba("+R+", "+G+", "+B+", " + (A/255) + ")";
+            this.ctx.strokeStyle="rgba("+R+", "+G+", "+B+", " + (A/255) + ")";
             return this;
         },
         strokeWidth: function(width){
-            this._strokeWidth=width;
+            this.ctx.lineWidth = width;
             return this;
         },
         addRes:function(res){

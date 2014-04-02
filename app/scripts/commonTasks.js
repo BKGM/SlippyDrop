@@ -15,7 +15,7 @@ module.exports = function(){
 
 	var background_c = [];
 
-	director.task('background', function(){
+	director.draw('background', function(){
         var c = random(0, 30);
         game.background(c, c, c, 255);
         
@@ -47,7 +47,7 @@ module.exports = function(){
 
     }, true);
     
-    director.task('logo', function(logo_x, logo_y){
+    director.draw('logo', function(logo_x, logo_y){
 
         var c = random(0, 30);
         var f = 25;
@@ -56,14 +56,14 @@ module.exports = function(){
         
         var d = random(-1, 1);
         var e = random(-1, 1);
-        
-        game.text('BKgameMaker', logo_x + d, logo_y + f + e, 20);
-        
-        game.text('WHITE DROP', logo_x + d, logo_y - f + e, 50);
+        game.fontSize(20);
+        game.text('BKgameMaker', logo_x + d, logo_y + f + e);
+        game.fontSize(50);
+        game.text('WHITE DROP', logo_x + d, logo_y - f + e);
         game.fill(255-c, 255-c, 255-c, 255);
     }, true);
     
-    director.task("buttons", function(buttons) {
+    director.draw("buttons", function(buttons) {
         var x 		= buttons.x,
         	y 		= buttons.y,
         	w 		= buttons.w,
@@ -76,12 +76,14 @@ module.exports = function(){
         
         var d = random(0, 1),
         	e = random(-1, 0);
+
+        game.fontSize(f);
         
         for (var i = 0, l = list.length; i < l; i++) {
             game.fill(240, 240, 240, 180);
             game.rect(x + d, y - ( h + s ) * i + e, w, h);
             game.fill(0, 0, 0, 220);
-            game.text(list[i], x + d, y - ( h + s ) * i + e + 4, f);
+            game.text(list[i], x + d, y - ( h + s ) * i + e + 4);
         }
         
     }, true);
