@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>LEADERBOARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/main.css"/>
+    <script src="//connect.facebook.net/en_US/all.js"></script>
+</head>
+
+<body>
+<div id="fb-root"></div>
+<div id="container" class="page_leaderboards">
+
+    <div id="title">LEADERBOARD</div>
+    <div class="fb-like" data-href="https://www.facebook.com/BKGameMaker" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+    <div id="data">
+        <table id="leaderboard">
+            <tr>
+                <td class="position"> 1 </td>
+                <td class="avatar"><img src="https://graph.facebook.com/116364148551574/picture"></td>
+                <td class="name">  BK Game Maker  </td> 
+                <td class="score">  1  </td>
+            </tr>            
+        </table>
+    </div>
+</div>
+<!-- /#container -->
+
+
+<script>
+
+    function initializeView() {
+        document.getElementById("leaderboard").innerHTML='';
+    }
+
+    function addScores(scores) {
+        var leaderboards = document.getElementById("leaderboard");
+
+        for (var i = 0; i< scores.length; ++i) {
+            var score = scores[i];
+            var newTR = document.createElement("tr");
+            if (score.me) {
+                newTR.setAttribute("class", "active");
+            }
+
+            var str = '<td class="position">' + (score.position+1) + '</td>' +
+                    '<td class="avatar"><img src="' + score.imageURL + '"></td>'+
+                    '<td class="name">' + score.userName + '</td>' +
+                    '<td class="score">' + score.score + '</td>'
+
+            newTR.innerHTML = str;
+            leaderboards.appendChild(newTR); 
+        }
+
+    }
+</script>
+
+</body>
+</html>

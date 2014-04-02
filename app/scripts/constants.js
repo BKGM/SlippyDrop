@@ -32,11 +32,13 @@ var game = require('./game'),
 					        f : 30 * SQRT_SCALE,
 					        list : [
 					            "Try again",
-					            "Share your score"
+					            "Share your score",
+					            "Show Leaderboard"
 					        ],
 					        actions : [
 					            "game",
-					            "share"
+					            "share",
+					            "leaderboard"
 					        ]
 					    }
 };

@@ -167,7 +167,7 @@ window.Base64Binary = {
                 app_id=obj.appId;
             }
             try {
-                this._isCordova ? FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false }) : FB.init({ appId: app_id,status: true,xfbml: true,cookie: true,frictionlessRequests: true,oauth: true});
+                BKGM._isCordova ? FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false }) : FB.init({ appId: app_id,status: true,xfbml: true,cookie: true,frictionlessRequests: true,oauth: true});
                 
             } catch (e) {
                 alert(e);
@@ -187,20 +187,21 @@ window.Base64Binary = {
             this.iframe.style.display="inherit";
             this.iframe.style.top=(y||0)+"px";
             this.iframe.style.left=(x||0)+"px";
-            this.iframe.onload=function(){
-                self.showLeaderboard();
-            }
+            this.iframe.style.border="none";
             if(isClose) return;
             this.closeButton=document.createElement('div');
             document.body.appendChild(this.closeButton);
             this.closeButton.style.display="none";
             this.closeButton.style.position="fixed";
-            this.closeButton.style.width="50px";
-            this.closeButton.style.height="50px";
-            this.closeButton.style.top='0px';
+            this.closeButton.style.width="30px";
+            this.closeButton.style.height="30px";
+            this.closeButton.style.lineHeight="30px";
+            this.closeButton.style.borderRadius="45px";
+            this.closeButton.style.top='10px';
+            this.closeButton.style.backgroundColor="#444750";
+            this.closeButton.style.color="#fafafa";
             this.closeButton.style.left=(Game.WIDTH-50)+'px';
             this.closeButton.style.textAlign="center";
-            this.closeButton.style.lineHeight="50px";
             this.closeButton.style.fontWeight="bold";
             this.closeButton.style.fontSize="30px";
             this.closeButton.style.textDecoration= "none";      
@@ -354,7 +355,9 @@ window.Base64Binary = {
         showLeaderboard : function(callback, params) {
            
             var self=this;
-            self.iframe.contentWindow.initializeView();
+            self.iframe.style.display="inherit";
+            if(self.closeButton)self.closeButton.style.display="inherit";
+            
             this.getAuthResponse(function(access_token,uid){
                 BKGM.ajax({
                     url:"https://graph.facebook.com/"+self.app_id + "/scores/?access_token=" + access_token,
@@ -387,9 +390,9 @@ window.Base64Binary = {
                             }
                         }
                         // var js = "addScores(" +  + ")";
+                        self.iframe.contentWindow.initializeView();
                         self.iframe.contentWindow.addScores(scores);
-                        self.iframe.style.display="inherit";
-                        if(self.closeButton)self.closeButton.style.display="inherit";
+                        
                         // dialog.eval(js);
                     }
                 })

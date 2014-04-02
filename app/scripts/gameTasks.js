@@ -23,8 +23,9 @@ module.exports = function(){
         localscore = new BKGM.ScoreLocal("whitedrop");
 
     _fb.init({appId:"296632137153437"});
-    _fb.initLeaderboards(game,null,WIDTH,0,760-WIDTH,HEIGHT,true);
-    _fb.login(_fb.showLeaderboard);
+    _fb.initLeaderboards(game,null,0,0,WIDTH,HEIGHT);
+    _fb.hideLeaderboard();
+    _fb.login(_fb.hideLeaderboard);
     _fb.getScore(null, function(score){
         localscore.submitScore(score);
     });
@@ -49,10 +50,11 @@ module.exports = function(){
                         l  = actions.length;
                     if (tx > x - w2 && tx < x + w2) {
                         while (i <= l) {
-                            if (ty > y - h * i - h2 && ty < y - h * i + h2) {
+                            if (ty > y - (h + s) * i - h2 && ty < y - (h + s) * i + h2) {
                                 switch(actions[i]){
                                     case 'game' : director.switch('game'); break;
                                     case 'share': _fb.postCanvas(); break;
+                                    case 'leaderboard':_fb.showLeaderboard();break;
                                 };
                                 break;
                             }
@@ -118,7 +120,7 @@ module.exports = function(){
 
     director.taskOnce("calscore", function(){
         _fb.submitScore(score,null,function(){
-            _fb.showLeaderboard();
+            // _fb.showLeaderboard();
         });
         if(highscore<score){
             localscore.submitScore(score);
