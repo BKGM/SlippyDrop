@@ -52,13 +52,15 @@ var lines = explosion.lines;
 explosion.isDone = function() {
     return this.opacity <= 0;
 };
-
+explosion.update = function() {
+    this.opacity = 255 * (1 - (this.time/30));
+    this.time += 3 / (this.time * SCALE);
+};
 explosion.draw = function() {
     
     game.fill(255, 255, 255, random(0, 250));
     game.rect(0,0,WIDTH,HEIGHT);
     
-    this.time += 3 / (this.time * SCALE);
 
     game.lineCapMode('round');
     game.strokeWidth(random(5, Math.floor(30 * SCALE)));
@@ -71,7 +73,7 @@ explosion.draw = function() {
         game.line(p.x, p.y, vt.x, vt.y);
     }
 
-    this.opacity = 255 * (1 - (this.time/30));
+    
     
     game.lineCapMode('butt');
     game.strokeWidth(0);

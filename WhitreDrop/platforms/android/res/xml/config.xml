@@ -4,13 +4,25 @@
     <feature name="App">
         <param name="android-package" value="org.apache.cordova.App" />
     </feature>
-    <name>HelloCordova</name>
+    <name>WhiteDrop</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        BKGM
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="bkgamemaker@gmail.com" href="http://game.bkgamemaker.com">
+        BK Game Maker Studio
     </author>
-    <content src="index.html" />
+    <preference name="permissions" value="none" />
+    <preference name="phonegap-version" value="3.4.0" />
+    <preference name="orientation" value="portrait" />
+    <preference name="target-device" value="universal" />
+    <preference name="fullscreen" value="true" />
+    <preference name="prerendered-icon" value="true" />
+    <preference name="ios-statusbarstyle" value="black-opaque" />
+    <preference name="detect-data-types" value="true" />
+    <preference name="exit-on-suspend" value="false" />
+    <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="disable-cursor" value="false" />
+    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-installLocation" value="auto" />
     <access origin="*" />
 </widget>

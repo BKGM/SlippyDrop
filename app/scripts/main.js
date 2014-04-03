@@ -10,4 +10,4 @@
 var app = require('./app.js');
 
 document.addEventListener("deviceready", app, false);
-window.addEventListener("load", app, false);
+// window.addEventListener("load", app, false);

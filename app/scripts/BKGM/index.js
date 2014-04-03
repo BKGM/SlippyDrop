@@ -16,7 +16,7 @@ var BKGM = BKGM||{};
     
 
     ((typeof(cordova) == 'undefined') && (typeof(phonegap) == 'undefined')) ? BKGM._isCordova=false : BKGM._isCordova=true;
-    var lastTime=0;
+    // var lastTime=0;
     var t = 0;
     var sceneTime = 0;
     var frameTime=1000/60;
@@ -137,10 +137,15 @@ var BKGM = BKGM||{};
         else {
             this.canvas = document.createElement('canvas');
             this.canvas.setAttribute("id", "game");
-            this.canvas.height = window.innerHeight;
-            this.canvas.width  = 320;
-            
             document.body.appendChild(this.canvas);
+            this.canvas.width  = 320;
+            this.canvas.height = 600;
+            // this.canvas.width =window.innerWidth;
+            // this.canvas.height = window.innerHeight;
+            
+            
+            
+            
         }       
         this.width=this.canvas.width;
         this.height=this.canvas.height;
@@ -152,9 +157,6 @@ var BKGM = BKGM||{};
         this.ctx.lineCap = 'butt';
         this._fontSize = 40;
 
-        this.ctx.imageSmoothingEnabled= true;
-        this.ctx.mozImageSmoothingEnabled= true;
-        this.ctx.webkitImageSmoothingEnabled= true;
         // this._circle = document.createElement('canvas');
         // this._circle.width=200;
         // this._circle.height=200;
@@ -188,6 +190,8 @@ var BKGM = BKGM||{};
     }
     BKGM.prototype = {
         time:0,
+        SCALEX:1,
+        SCALEY:1,
         loop:function(_this){            
             _this.FPS=_this._fps.getFPS();            
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
@@ -203,8 +207,16 @@ var BKGM = BKGM||{};
             if(this.Codea){
                 this.ctx.translate(0, this.canvas.height);
                 this.ctx.scale(1,-1);
-            }            
-            lastTime=new Date();
+            }
+            if(BKGM._isCordova){
+                this.SCALEX = this.WIDTH/window.innerWidth;
+                this.SCALEY = this.HEIGHT/window.innerHeight;
+            }
+            else{
+                this.SCALEX = this.WIDTH/this.canvas.offsetWidth;
+                this.SCALEY = this.HEIGHT/this.canvas.offsetHeight;                
+            }  
+            // lastTime=new Date();
             addLoop(this);
             _loop();
             return this;
@@ -381,19 +393,20 @@ var BKGM = BKGM||{};
         } 
         x -= _this.canvas.offsetLeft;
         y -= _this.canvas.offsetTop;
+        x*=_this.SCALEX;
+        y*=_this.SCALEY;
         if(_this.Codea){
-            y=_this.HEIGHT-y;
-        }
+            y=_this.HEIGHT-y;        }
+
         return {x:x,y:y,number:e.identifier}
     }
     
     var addMouseTouchEvent= function(_this){
-        
-        _this.currentTouch={ state:"ENDED" ,isTouch:false};
+        _this.currentTouch={ state:"ENDED" ,posX:0,posY:0,isTouch:false};
         _this.canvas.addEventListener('touchstart', function(event) {
-            var touchs=[];
+            this._istouch=true;
             event.preventDefault();
-            _this._istouch=true;
+            var touchs=[];
             if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH)
                 if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
                 event.targetTouches > 1) {
@@ -407,10 +420,12 @@ var BKGM = BKGM||{};
                     var e=checkMousePos(touch,_this);
                     _this.currentTouch.state="START";
                     _this.currentTouch.isTouch=true;
-                    _this.currentTouch.x = e.x;
-                    _this.currentTouch.y = e.y;
                     if(_this.states && _this.states._touchStart) _this.states._touchStart(e); else
                     if(_this._touchStart) _this._touchStart(e);
+                    _this.currentTouch.posX=e.x;
+                    _this.currentTouch.posY=e.y;
+                    _this.currentTouch.x = e.x;
+                    _this.currentTouch.y = e.y;
                     break;
                 }
                 var touch = event.touches[i];
@@ -439,19 +454,18 @@ var BKGM = BKGM||{};
         _this.canvas.addEventListener('touchmove', function(event) {
             var touchs=[];
             event.preventDefault();
+           
             for (var i = 0; i < event.changedTouches.length; i++) {
-                // var touch = event.changedTouches[i];
-                if(BKGM.TYPE_TOUCH==BKGM.SINGLE_TOUCH) { 
-                    var touch = event.changedTouches[i];
-                    var e=checkMousePos(touch,_this);                  
-                    _this.currentTouch.state="MOVING";
-                    _this.currentTouch.x = e.x;
-                    _this.currentTouch.y = e.y;
-                    break;
-                }
                 var touch = event.changedTouches[i];
                 var e=checkMousePos(touch,_this);
-                
+                if(BKGM.TYPE_TOUCH==BKGM.SINGLE_TOUCH && touch.identifier==0) {                   
+                    _this.currentTouch.state="MOVING";
+                    _this.currentTouch.x = e.x;
+                    _this.currentTouch.y = e.y;                    
+                    if(_this._touchDrag) _this._touchDrag(e);
+                    break;
+
+                }
                 touchs.push(e);
                 
             }
@@ -468,15 +482,21 @@ var BKGM = BKGM||{};
                 event.targetTouches > 0) {
               return; // Ignore if still touching with one or more fingers
             }
-           
+            if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH) {
+                var e={x:_this.currentTouch.posX,y:_this.currentTouch.posY};
+                if(_this.states && _this.states.touchEnd) _this.states._touchEnd(e); else
+                    if(_this._touchEnd) _this._touchEnd(e); 
+                    return;
+            }
             for (var i = 0; i < event.changedTouches.length; i++) {
                
-                if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH) {            
+                if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH) {
+                    
+                    // this._istouch=false;            
                     // console.log(touch)  
-                     var touch = event.changedTouches[0]; 
-                    _this.currentTouch.state="ENDED";
-                    _this.currentTouch.isTouch=false;
+                    var touch = event.changedTouches[0];                      
                     var e=checkMousePos(touch,_this);
+                    _this.currentTouch.isTouch=false;
                     _this.currentTouch.x = e.x;
                     _this.currentTouch.y = e.y;
                     if(_this.states && _this.states.touchEnd) _this.states._touchEnd(e); else
@@ -498,6 +518,9 @@ var BKGM = BKGM||{};
             
             
         }, false);
+       
+       
+       
         _this.canvas.addEventListener('mousedown', function(event) {
             if (_this._istouch) return;
             var e=checkMousePos(event,_this);

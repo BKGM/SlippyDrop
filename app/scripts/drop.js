@@ -123,16 +123,16 @@ drop.collide = function(){
 
 drop.draw = function(){
     game.fill(255, 255, 255, 255);
-    
+    var x = this.x;
     // Draw head
-    game.circle(x, y, diameter);
+    // game.circle(x, y, diameter);
 
     // Draw this.tail
     for (var i = 0, l = this.tail.length; i < l; i++) {
         game.circle(this.tail[i], y + i * speed, diameter - diameter*i/l);
     }
 
-    var x = this.x;
+    
 
     
     // Draw eyes

@@ -3,7 +3,17 @@
         "installed": [],
         "uninstalled": []
     },
-    "config_munge": {},
+    "config_munge": {
+        "config.xml": {
+            "/*": {}
+        },
+        "res/values/facebookconnect.xml": {
+            "/*": {}
+        },
+        "AndroidManifest.xml": {
+            "application": {}
+        }
+    },
     "installed_plugins": {},
     "dependent_plugins": {}
 }

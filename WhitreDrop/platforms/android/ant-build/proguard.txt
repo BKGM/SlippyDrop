@@ -1,3 +1,3 @@
 # view AndroidManifest.xml #generated:6
--keep class com.BKGameMaker.Whitedrop.HelloCordova { <init>(...); }
+-keep class com.BKGameMaker.Whitedrop.WhiteDrop { <init>(...); }
 

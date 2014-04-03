@@ -165,7 +165,8 @@ window.Base64Binary = {
             var app_id="296632137153437";
             if (obj){
                 app_id=obj.appId;
-            }
+            } 
+            if(!window.FB) return;
             try {
                 BKGM._isCordova ? FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false }) : FB.init({ appId: app_id,status: true,xfbml: true,cookie: true,frictionlessRequests: true,oauth: true});
                 
@@ -181,8 +182,8 @@ window.Base64Binary = {
             // this.iframe.style.backgroundcolor= "#fff";
             document.body.appendChild(this.iframe);
             this.iframe.src=link||"leaderboards.html";
-            this.iframe.width=width||Game.WIDTH;
-            this.iframe.height=height|| Game.HEIGHT;
+            this.iframe.width="100%";
+            this.iframe.height="100%";
             this.iframe.style.position="absolute";
             this.iframe.style.display="inherit";
             this.iframe.style.top=(y||0)+"px";
@@ -200,7 +201,7 @@ window.Base64Binary = {
             this.closeButton.style.top='10px';
             this.closeButton.style.backgroundColor="#444750";
             this.closeButton.style.color="#fafafa";
-            this.closeButton.style.left=(Game.WIDTH-50)+'px';
+            this.closeButton.style.left=(window.innerWidth-50)+'px';
             this.closeButton.style.textAlign="center";
             this.closeButton.style.fontWeight="bold";
             this.closeButton.style.fontSize="30px";
@@ -220,7 +221,7 @@ window.Base64Binary = {
             this.closeButton.onmouseup=function(){
                 self.closeButton.style.opacity= 1;
                 if(self.hideLeaderboard) self.hideLeaderboard();
-            }
+            }            
         },
         handleStatusChange:function(session) {
             if (session.authResponse) {
@@ -239,6 +240,7 @@ window.Base64Binary = {
         },            
         login:function(callback) {
             var self=this;
+            if(!window.FB) return;
             this.getLoginStatus(function(response) {                
                 if (!response) {
                     FB.login(
@@ -262,6 +264,7 @@ window.Base64Binary = {
         },
         getLoginStatus: function(callback) {
             var self=this;
+            if(window.FB)
             FB.getLoginStatus(function(response) {
                               if (response.status == 'connected') {
                                 self.isLogin=true;
@@ -276,6 +279,7 @@ window.Base64Binary = {
         },
         getAuthResponse: function(callback1){
             var self=this;
+            if(window.FB)
             FB.getLoginStatus(function(response) {
                   if (response.status == 'connected') {
                     if (response.authResponse && callback1) 
@@ -328,7 +332,7 @@ window.Base64Binary = {
             
         },
         getScore: function(params,callback) {
-
+            if(!window.FB) return;
             var apiCall = ((params && params.userID) ? params.userID : "me") + "/scores";
             FB.api(apiCall, function(response) {
                 if (response.error) {

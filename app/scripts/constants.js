@@ -21,7 +21,7 @@ var game = require('./game'),
 	SPEED 				: screenset(game,{
 							'IPAD':3,
 							'IPHONE':2,
-							'DEFAULT':Math.floor(4*SQRT_SCALE)
+							'DEFAULT':1.8
 						}),
 	BUTTONS				: buttons = {
 					        x : WIDTH/2,

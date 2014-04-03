@@ -148,11 +148,17 @@ module.exports = function(){
         explosion.reset(drop.x, DROP_Y);
     });
     
-    director.draw("explosion", function() {
-        explosion.draw()
+    director.update("explosion", function() {
+        explosion.update();
         if (explosion.isDone()) {
             director.switch("gameover");
         }
+        
+    });
+
+    director.draw("explosion", function() {
+        explosion.draw();
+        
     });
 
     director.draw("result", function() {

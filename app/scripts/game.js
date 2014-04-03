@@ -1,7 +1,7 @@
 var BKGM = require('./BKGM'),
 	director = require('./BKGM/director'),
 	game = new BKGM({
-    	DeviceMotion: true,
+    	DeviceMotion: false,
     	Codea		: true,
 	    setup: function(){
 		    director.switch("menu");
