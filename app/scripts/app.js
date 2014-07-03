@@ -12,7 +12,12 @@ var BKGM = require('./BKGM'),
 	random = require('./random');
 
 console.log(require('should'));
-
+	// var parentElement = document.getElementById('deviceready');
+ //    var listeningElement = parentElement.querySelector('.listening');
+ //    var receivedElement = parentElement.querySelector('.received');
+    
+ //    listeningElement.setAttribute('style', 'position: absolute');
+ //    receivedElement.setAttribute('style', 'position: absolute');
 module.exports = function(){
 
 	require('./screenplay')();

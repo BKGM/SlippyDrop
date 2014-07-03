@@ -28,6 +28,7 @@ States.prototype = {
         var self = this;
         this.draws[name] = function() {
             self.once === false?fn(arguments):null;
+            self.once === false?console.log(name):null;
         };
     },
     run: function() {

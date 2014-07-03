@@ -21,14 +21,36 @@ module.exports = function(){
 		highscore = 0,
         newbestscore = false,
         localscore = new BKGM.ScoreLocal("whitedrop");
-
-    _fb.init({appId:"296632137153437"});
+    _fb.init({appId:"1416361488615336"});
     _fb.initLeaderboards(game,null,0,0,WIDTH,HEIGHT);
     _fb.hideLeaderboard();
-    _fb.login(_fb.hideLeaderboard);
-    _fb.getScore(null, function(score){
-        localscore.submitScore(score);
+    var token="";
+    _fb.login(function(res){
+        _fb.getAuthResponse(function(accessToken){
+            // data = new FormData();
+            // data.append("access_token",accessToken)
+            data={access_token:accessToken};
+            data=JSON.stringify(data);
+            BKGM.ajax({
+                url:'http://bkgmservices.herokuapp.com/authenticate',
+                type:"POST",
+                contentType:'application/json; charset=utf-8',
+                data:data,
+                complete:function(res){
+                    var d =JSON.parse(res);
+                    token=d.token;
+                },
+                error:function(res){
+                    console.log(res)
+                }
+            })
+            
+        })
+        _fb.hideLeaderboard();
     });
+    // _fb.getScore(null, function(score){
+    //     localscore.submitScore(score);
+    // });
 
     var _startgame=(function(){
         var x       = buttons.x,
@@ -52,9 +74,46 @@ module.exports = function(){
                         while (i <= l) {
                             if (ty > y - (h + s) * i - h2 && ty < y - (h + s) * i + h2) {
                                 switch(actions[i]){
-                                    case 'game' : director.switch('game'); break;
-                                    case 'share': _fb.postCanvas(); break;
-                                    case 'leaderboard':_fb.showLeaderboard();break;
+                                    case 'game' : 
+                                        director.switch("game"); 
+                                        if(!window.admob) break;
+                                        var success = function() { console.log("killAd Success"); };
+                                        var error = function(message) { console.log("Oopsie! " + message); };
+                                        admob.killAd(success,error);
+                                        if(game.ads){
+                                            game.SCALEX = game.WIDTH/window.innerWidth;
+                                            game.SCALEY = game.HEIGHT/window.innerHeight;
+                                            game._sy=0;
+                                            game.ads=false;
+                                        }                                        
+                                         
+                                        break;
+                                    case 'share': _fb.postCanvas(game.canvas,score); break;
+                                    case 'leaderboard':
+                                    console.log('leaderboard')
+                                    _fb.getAuthResponse(function(accessToken){
+                                        // data = new FormData();
+                                        // data.append("access_token",accessToken)
+                                        data={access_token:accessToken};
+                                        data=JSON.stringify(data);
+                                        BKGM.ajax({
+                                            url:'http://bkgmservices.herokuapp.com/api/test/leaderboard',
+                                            type:"POST",
+                                            contentType:'application/json; charset=utf-8',
+                                            token:token,
+                                            data:data,
+                                            complete:function(res){
+                                                var d =JSON.parse(res);
+                                                console.log(d)
+                                            },
+                                            error:function(res){
+                                                console.log(res)
+                                            }
+                                        })
+                                        
+                                    })
+                                    // _fb.showLeaderboard();
+                                    break;
                                 };
                                 break;
                             }
@@ -62,12 +121,19 @@ module.exports = function(){
                         }
                     }
                 break;
-                case 'menu': director.switch("game"); break;
+                case 'menu':director.switch("game",true);
+                            if(!window.admob) break; 
+                            var success = function() { console.log("killAd Success"); };
+                            var error = function(message) { console.log("Oopsie! " + message); };
+                            admob.killAd(success,error); 
+                            
+                            break;
             }
         };
     })();
 
     game.mouseDown=function(e){
+        console.log(e)
         _startgame(e);
     };
 
@@ -119,7 +185,7 @@ module.exports = function(){
     });
 
     director.taskOnce("calscore", function(){
-        _fb.submitScore(score,null,function(){
+        _fb.submitScore(score,token,function(){
             // _fb.showLeaderboard();
         });
         if(highscore<score){
@@ -145,14 +211,38 @@ module.exports = function(){
 
     director.taskOnce("createExplosion", function() {
         //sound(DATA, "ZgNACgBAK0RBGRII9Y/tPt6vyD6gjBA+KwB4b3pAQylFXB0C")
-        explosion.reset(drop.x, DROP_Y);
+        director.switch("gameover",true);
+        if(!window.admob) return;
+        var successCreateBannerView = function() { admob.requestAd({'isTesting': false},success,error); };
+        var success = function() { 
+            // if(!game.ads){
+                game.ads=true;
+                game.SCALEX = game.WIDTH/window.innerWidth;
+                game.SCALEY = game.HEIGHT/window.innerHeight;
+                game._sy=-50;
+                // game.canvas.style.top="50px";
+            // }            
+            console.log("requestAd Success"); 
+        };
+        var error = function(message) { console.log("Oopsie! " + message); };
+        var options = {
+            'publisherId': 'a1533bd81f37c40',
+            'adSize': admob.AD_SIZE.BANNER,
+            'positionAtTop': true
+        }
+        // alert("create");
+        
+        admob.createBannerView(options,successCreateBannerView,error);
+        
+        // explosion.reset(drop.x, DROP_Y);
+        
     });
     
     director.update("explosion", function() {
-        explosion.update();
-        if (explosion.isDone()) {
-            director.switch("gameover");
-        }
+        // explosion.update();
+        // if (explosion.isDone()) {
+            
+        // }
         
     });
 

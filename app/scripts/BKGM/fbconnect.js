@@ -1,4 +1,6 @@
 var BKGM=require('./');
+// var non=require('./todataurl');
+var md5=require('./md5');
 (function(FBConnect){
     /*
 Copyright (c) 2011, Daniel Guerrero
@@ -34,6 +36,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer
  * https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array
  */
+function convertNumberToLetter (number){
+    var arrNumber = number+'';
+    var length = arrNumber.length;
+    var arrLetter = ['a','b','c','d','e','g','h','g','h'];
+    var text = '';
+    for(var i=0; i< length; i++){
+        for(var j=0; j < arrLetter.length; j++){
+            if(parseInt(arrNumber[i]) === j){
+                text += arrLetter[j];
+            }
+        }
+    }
+
+    return text;
+}
 
 window.Base64Binary = {
     _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -168,7 +185,10 @@ window.Base64Binary = {
             } 
             if(!window.FB) return;
             try {
-                BKGM._isCordova ? FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false }) : FB.init({ appId: app_id,status: true,xfbml: true,cookie: true,frictionlessRequests: true,oauth: true});
+                if(BKGM._isCordova) 
+                    FB.init({ appId: app_id, nativeInterface: CDV.FB, useCachedDialogs: false })
+                else 
+                    FB.init({ appId: app_id,status: true,xfbml: true,cookie: true,frictionlessRequests: true,oauth: true});
                 
             } catch (e) {
                 alert(e);
@@ -241,19 +261,24 @@ window.Base64Binary = {
         login:function(callback) {
             var self=this;
             if(!window.FB) return;
-            this.getLoginStatus(function(response) {                
+            this.getLoginStatus(function(response) {  
+            alert("login")              
                 if (!response) {
                     FB.login(
                     function(response) {
                         if (response.session) {
+                            alert("session")
                             if(callback) callback(response);
                         } else {
+                            alert("non")
                             if(callback) callback(response);
                         }
                     },
                     { scope: "publish_actions" }
                 );
-                }
+                } else
+                    if(callback) callback(response);
+                    alert(response)
                 FB.api('/me', function(response) {
                    self.id=response.id; 
                 });
@@ -271,6 +296,7 @@ window.Base64Binary = {
                                 if (response.authResponse && callback) 
                                     callback(response.authResponse);
                               } else {
+                                // alert(response)
                                 self.isLogin=false;
                                 if (callback) callback(false);
                               }
@@ -284,24 +310,51 @@ window.Base64Binary = {
                   if (response.status == 'connected') {
                     if (response.authResponse && callback1) 
                         {
+                            alert('callback')
+                            alert(response.authResponse.userId)
                             callback1(response.authResponse.accessToken,response.authResponse.userId);
                         }
                   } else {
                     self.login(function(response){
+                        alert(response)
                         if(response && response.authResponse) {authResponse=response.authResponse; if (callback1) callback1(authResponse.accessToken,authResponse.userId);}
                     })
                   }
                   });
         },
-        postCanvas:function(message, callback) {
+        facebookWallPost:function(message) {
+            console.log('Debug 1');
+            var params = {
+                method: 'feed',
+                name: 'Facebook Dialogs',
+                link: 'https://apps.facebook.com/whitedrop/',
+                picture: 'https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-prn1/t1.0-9/1504100_207272536127401_513757591_n.png',
+                caption: 'White Drop score post',
+                description: 'Get a new score'
+              };
+            console.log(params);
+            FB.ui(params, function(obj) { console.log(obj);});
+        },
+        postCanvas:function(canvas,message, callback) {
+            alert("wait")
+            var self=this;
             this.getAuthResponse(function(access_token,uid){
+                alert(access_token)
                 // var uid = authResponse.userID;
                 // var access_token = authResponse.accessToken;
-                var canvas = document.getElementById("game");
+                var canvas = canvas||document.getElementsByTagName('canvas')[0];
+                alert(canvas);
                 var imageData = canvas.toDataURL("image/png");
+                alert(imageData);
+                if(imageData== "data:,"){
+                    self.facebookWallPost();
+                    return;
+                }
+
                 var mess =message || "http://fb.com/BKGameMaker.com";
-                var encodedPng = imageData.substring(imageData.indexOf(',')+1,imageData.length);
+                var encodedPng = imageData.split(",")[1];
                 var decodedPng = Base64Binary.decode(encodedPng);
+                alert(decodedPng);
                 PostImageToFacebook(access_token, "filename.png", 'image/png', decodedPng);
               
             });
@@ -309,26 +362,47 @@ window.Base64Binary = {
             
 
         },
-        submitScore:function(score,params,callback){
-            this.getScore(params,function(currentScore, error) {
-                if (error) {                    
-                    if (callback)
-                        callback(error);
-                   return;
-                }
-                var topScore = currentScore ? currentScore.score : 0;
-                if (score <= topScore) {
-                    //don't submit the new score because a better score is already submitted
-                    if (callback)
-                        callback(null);
-                    return;
-                }
-                var apiCall = "/" + ((params && params.userID) ? params.userID : "me") + "/scores";
-                FB.api(apiCall, 'POST', {score:score}, function (response) {
-                     if (callback)
-                        callback(response.error);
-                });
-            })
+        submitScore:function(score,token,callback){
+            // this.getScore(params,function(currentScore, error) {
+            //     if (error) {                    
+            //         if (callback)
+            //             callback(error);
+            //        return;
+            //     }
+            //     var topScore = currentScore ? currentScore.score : 0;
+            //     if (score <= topScore) {
+            //         //don't submit the new score because a better score is already submitted
+            //         if (callback)
+            //             callback(null);
+            //         return;
+            //     }
+            //     var apiCall = "/" + ((params && params.userID) ? params.userID : "me") + "/scores";
+            //     FB.api(apiCall, 'POST', {score:score}, function (response) {
+            //          if (callback)
+            //             callback(response.error);
+            //     });
+            // })
+            var self=this;
+            this.getAuthResponse(function(accessToken,uid){
+                var hash = md5(' random_string_a'+'bkgm'+ ' randomString_b');
+                data={hash : hash, score: score, access_token : accessToken};
+                data=JSON.stringify(data);
+                console.log(self.app_id)
+                var scoreLeter=convertNumberToLetter(score);
+                BKGM.ajax({
+                    url:'http://bkgmservices.herokuapp.com/api/auth/'+scoreLeter+'/noernasdwe?a= random_string_a&b= randomString_b&id='+self.app_id,
+                    type:'POST',
+                    contentType:'application/json; charset=utf-8',
+                    data:data,
+                    token:token,
+                    complete:function(res){
+                        console.log(res);
+                    },
+                    error:function(res){
+                        console.log(res);
+                    }
+                })
+            });
             
         },
         getScore: function(params,callback) {
@@ -361,16 +435,19 @@ window.Base64Binary = {
             var self=this;
             self.iframe.style.display="inherit";
             if(self.closeButton)self.closeButton.style.display="inherit";
-            
+            alert("wait");
             this.getAuthResponse(function(access_token,uid){
+                alert("get");
                 BKGM.ajax({
                     url:"https://graph.facebook.com/"+self.app_id + "/scores/?access_token=" + access_token,
                     type:'GET',
                     complete:function(response) {
                         // if (dialog.closed)
                         //     return;
+                        alert(response)
                         response = JSON.parse(response);
                         if (response.error) {
+                            // alert(response.error);
                             if (callback) {
                                 // callbackSent = true;
                                 callback(response.error);
@@ -378,7 +455,6 @@ window.Base64Binary = {
                             }
                             return;
                         }
-                        
                         var scores = [];
                         if (response.data && response.data.length) {
 

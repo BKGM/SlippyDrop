@@ -137,21 +137,25 @@ var BKGM = BKGM||{};
         else {
             this.canvas = document.createElement('canvas');
             this.canvas.setAttribute("id", "game");
-            document.body.appendChild(this.canvas);
+            
             this.canvas.width  = 320;
             this.canvas.height = 600;
-            // this.canvas.width =window.innerWidth;
-            // this.canvas.height = window.innerHeight;
             
             
             
             
-        }       
+            
+        }    
+        this._canvas = document.createElement('canvas');
+        document.body.appendChild(this.canvas);   
+        this._canvas.width =320;
+        this._canvas.height = 600;
         this.width=this.canvas.width;
         this.height=this.canvas.height;
         this.WIDTH = this.canvas.width;
         this.HEIGHT  = this.canvas.height;
         this.ctx = this.canvas.getContext('2d');
+        this._ctx = this._canvas.getContext('2d');
         this.ctx.textAlign = "center";
         this.ctx.font = '40px SourceSansPro';
         this.ctx.lineCap = 'butt';
@@ -192,11 +196,13 @@ var BKGM = BKGM||{};
         time:0,
         SCALEX:1,
         SCALEY:1,
+        _sy:0,
         loop:function(_this){            
             _this.FPS=_this._fps.getFPS();            
             _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
             _this._staticDraw();
-            _this.draw(_this);                  
+            _this.draw(_this);   
+            // _this._ctx.drawImage(_this.canvas,0,_this._sy,_this._canvas.width,_this._canvas.height);               
             return _this;
         },
         run:function(){
@@ -391,10 +397,12 @@ var BKGM = BKGM||{};
           x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
           y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
         } 
+
         x -= _this.canvas.offsetLeft;
-        y -= _this.canvas.offsetTop;
+        y -= _this.canvas.offsetTop+_this._sy;
         x*=_this.SCALEX;
         y*=_this.SCALEY;
+
         if(_this.Codea){
             y=_this.HEIGHT-y;        }
 
@@ -403,8 +411,8 @@ var BKGM = BKGM||{};
     
     var addMouseTouchEvent= function(_this){
         _this.currentTouch={ state:"ENDED" ,posX:0,posY:0,isTouch:false};
-        _this.canvas.addEventListener('touchstart', function(event) {
-            this._istouch=true;
+        window.addEventListener('touchstart', function(event) {
+            _this._istouch=true;
             event.preventDefault();
             var touchs=[];
             if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH)
@@ -451,7 +459,7 @@ var BKGM = BKGM||{};
             
            
         }, false);
-        _this.canvas.addEventListener('touchmove', function(event) {
+        window.addEventListener('touchmove', function(event) {
             var touchs=[];
             event.preventDefault();
            
@@ -474,7 +482,7 @@ var BKGM = BKGM||{};
             }
             
         }, false);
-        _this.canvas.addEventListener('touchend', function(event) {
+        window.addEventListener('touchend', function(event) {
             var touchs=[];
             event.preventDefault();
             if(BKGM.TYPE_TOUCH===BKGM.SINGLE_TOUCH)
@@ -521,8 +529,9 @@ var BKGM = BKGM||{};
        
        
        
-        _this.canvas.addEventListener('mousedown', function(event) {
+        window.addEventListener('mousedown', function(event) {
             if (_this._istouch) return;
+            event.preventDefault();
             var e=checkMousePos(event,_this);
             _this._ismouseDown=true;
             _this.currentTouch.state="START";
@@ -538,8 +547,8 @@ var BKGM = BKGM||{};
             if(_this.states && _this.states._mouseDown) _this.states._mouseDown(e); else
                     if(_this._mouseDown) _this._mouseDown(e);
         }, false);
-        _this.canvas.addEventListener('mousemove', function(event) {
-            
+        window.addEventListener('mousemove', function(event) {
+            event.preventDefault();
 
             if(_this._ismouseDown){
                 var e=checkMousePos(event,_this);
@@ -551,8 +560,9 @@ var BKGM = BKGM||{};
             }
             
         }, false);
-        _this.canvas.addEventListener('mouseup', function(event) {
+        window.addEventListener('mouseup', function(event) {
             if (_this._istouch) return;
+            event.preventDefault();
             var e=checkMousePos(event,_this);
             _this._ismouseDown=false;
             _this.currentTouch.x = e.x;
@@ -717,6 +727,7 @@ var BKGM = BKGM||{};
     }
 })();
 (function(){
+    'use strict';
     // var BKGM = BKGM||{};
     // var s1 = new BKGM.Audio().setAudio('1');
     function getPhoneGapPath() {
@@ -857,14 +868,18 @@ var BKGM = BKGM||{};
             type:obj.type ? obj.type : "POST",// POST or GET
             data:obj.data ? obj.data : null,
             // processData:obj.processData ? obj.processData : false,
-            // contentType:obj.contentType ? obj.contentType :false,
+            contentType:obj.contentType ? obj.contentType :"text/plain;charset=UTF-8",
             // cache: obj.cache ? obj.cache : true,
             success: obj.success ? obj.success : null,
             error: obj.error ? obj.error : null,
-            complete: obj.complete ? obj.complete : null
+            complete: obj.complete ? obj.complete : null,
+            token: obj.token ? obj.token : null
         }
-        
+        var token=ajax.token;
         var xhr = new XMLHttpRequest();
+        
+        // xhr.setRequestHeader("Accept",ajax.contentType);
+        // xhr.setRequestHeader("Content-Type",ajax.contentType);
         // xhr.upload.addEventListener('progress',function(ev){
         //     console.log((ev.loaded/ev.total)+'%');
         // }, false);
@@ -878,6 +893,10 @@ var BKGM = BKGM||{};
             }            
         };
         xhr.open(ajax.type, ajax.url, true);
+        xhr.setRequestHeader("Content-Type",ajax.contentType);
+        xhr.setRequestHeader("Authorization" , 'Bearer '+token)
+        console.log(ajax.contentType)
+        // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         xhr.send(ajax.data);
     }
 })();

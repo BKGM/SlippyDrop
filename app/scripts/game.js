@@ -10,5 +10,5 @@ var BKGM = require('./BKGM'),
 	        director.run();
 	    }
 	});
-
+((typeof(cordova) == 'undefined') && (typeof(phonegap) == 'undefined')) ? BKGM._isCordova=false : BKGM._isCordova=true;
 module.exports = game;
